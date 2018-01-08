@@ -60,6 +60,8 @@ mapping:
         type: seq
         sequence:
         - include: command_schema
+      runonce:
+        type: bool
   system:
     type: bool
   hidden:

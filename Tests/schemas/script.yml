@@ -61,6 +61,8 @@ mapping:
     type: str
   releaseNotes:
     type: str
+  runonce:
+      type: bool
 
 # script->args
 schema;argument_schema:
