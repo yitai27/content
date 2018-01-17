@@ -186,6 +186,8 @@ script:
                 else:
                     try:
                         res = self.result.json()
+                        if 'qry' not in cmd:
+                            return res['return']
                         return res
                     except:
                         throw_error('Error - ESM replied with:\n - status code: {} \n - body: {}'.format(self.result.status_code, self.result.text))
