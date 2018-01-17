@@ -333,6 +333,8 @@ script:
         tc = getClient()
         ro = RequestObject()
         ro.set_http_method('GET')
+        if demisto.get(demisto.args(), 'owner'):
+            ro.set_owner(demisto.args()['owner']))
         ro.set_request_uri('/v2/tags/'+demisto.args()['tag']+'/indicators')
         results = tc.api_request(ro)
         if results.headers['content-type'] == 'application/json':
@@ -577,6 +579,8 @@ script:
       required: true
       default: true
       description: Tag value to filter by
+    - name: owner
+      description: Owner of new incident, default will be defaultOrg param
     description: Fetch all indicators that have given tag
   - name: tc-add-indicator
     arguments:
