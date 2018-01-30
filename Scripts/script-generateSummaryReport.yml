@@ -20,5 +20,13 @@ args:
   defaultValue: pdf
 - name: incidentId
   description: Incident ID to generate report for
+outputs:
+- contextPath: Report.Name
+  description: Report file name
+  type: string
+- contextPath: Report.FileID
+  description: File ID of the report
+  type: string
+releaseNotes: "-"
 scripttarget: 0
 
