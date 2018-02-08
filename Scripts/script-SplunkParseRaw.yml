@@ -1,0 +1,29 @@
+commonfields:
+  id: SplunkParseRaw
+  version: -1
+name: SplunkParseRaw
+script: |
+  res = []
+  raw = demisto.args()["rawSplunk"]
+  raw = raw.strip("}")
+  raw = raw.strip("{")
+  key_val_arr = raw.split(",")
+
+  for key_val in key_val_arr:
+      single_key_val = key_val.split("=")
+      if len(single_key_val)>1:
+          val = single_key_val[1]
+          val = val.strip("\"")
+          demisto.setContext(single_key_val[0], val)
+
+  demisto.results('Parsed raw Splunk event into context')
+type: python
+tags:
+- splunk
+comment: parse splunk raw event data
+enabled: true
+args:
+- name: rawSplunk
+  required: true
+  description: The splunk raw data
+scripttarget: 0
