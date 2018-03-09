@@ -1,0 +1,432 @@
+id: 06c22595-674b-4d4e-87d5-0f738c4dfff1
+version: 9
+name: Breach Playbook - PII Check Playbook - Illinois
+description: "This playbook goes through a checklist to help the analyst discern whether
+  the breached data contains any Personally Identifiable Information (PII) according
+  to Illinois law. \n \n**Source:** http://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=2702&ChapAct=815%C2%A0ILCS%C2%A0530/&ChapterID=67&ChapterName=BUSINESS+TRANSACTIONS&ActName=Personal+Information+Protection+Act."
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: 1b14a1e4-9a8f-4137-8c61-347fcddffe29
+    type: start
+    task:
+      id: 1b14a1e4-9a8f-4137-8c61-347fcddffe29
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "2"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 50
+        }
+      }
+  "2":
+    id: "2"
+    taskid: 0c5ec565-2231-4612-80b8-040e9200f038
+    type: regular
+    task:
+      id: 0c5ec565-2231-4612-80b8-040e9200f038
+      version: -1
+      name: Extract Data
+      description: This task should be replaced with an automation that extracts all
+        data labels that need to be checked against PII definitions.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "23"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 195
+        }
+      }
+  "3":
+    id: "3"
+    taskid: f1d7cc61-43de-4a61-822c-32a00a58ebb6
+    type: regular
+    task:
+      id: f1d7cc61-43de-4a61-822c-32a00a58ebb6
+      version: -1
+      name: Does data contain medical information?
+      description: "\"Medical information\" means any information regarding an individual's
+        medical history, mental or physical condition, or medical treatment or diagnosis
+        by a healthcare professional, including such information provided to a website
+        or mobile application.  \n**Source:** http://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=2702&ChapAct=815%C2%A0ILCS%C2%A0530/&ChapterID=67&ChapterName=BUSINESS+TRANSACTIONS&ActName=Personal+Information+Protection+Act."
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "24"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1340,
+          "y": 690
+        }
+      }
+  "4":
+    id: "4"
+    taskid: 2ab041d2-6385-4876-8271-c316034959ca
+    type: regular
+    task:
+      id: 2ab041d2-6385-4876-8271-c316034959ca
+      version: -1
+      name: Does data contain financial information?
+      description: "Account number or credit or debit card number, or an account number
+        or credit card number in combination with any required security code, access
+        code, or password that would permit access to an individual's financial account.
+        \ \n**Source:** http://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=2702&ChapAct=815%C2%A0ILCS%C2%A0530/&ChapterID=67&ChapterName=BUSINESS+TRANSACTIONS&ActName=Personal+Information+Protection+Act."
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "24"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 690
+        }
+      }
+  "5":
+    id: "5"
+    taskid: 7265100d-1a96-491c-8d00-f4e319396c2e
+    type: regular
+    task:
+      id: 7265100d-1a96-491c-8d00-f4e319396c2e
+      version: -1
+      name: Does data contain health insurance information?
+      description: " \"Health insurance information\" means an individual's health
+        insurance policy number or subscriber identification number, any unique identifier
+        used by a health insurer to identify the individual, or any medical information
+        in an individual's health insurance application and claims history, including
+        any appeals records.  \n**Source:** http://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=2702&ChapAct=815%C2%A0ILCS%C2%A0530/&ChapterID=67&ChapterName=BUSINESS+TRANSACTIONS&ActName=Personal+Information+Protection+Act."
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "24"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 690
+        }
+      }
+  "11":
+    id: "11"
+    taskid: 972dcd67-4cab-4517-8338-25222e7555d3
+    type: regular
+    task:
+      id: 972dcd67-4cab-4517-8338-25222e7555d3
+      version: -1
+      name: Does data contain low-level personal information?
+      description: "An individual's first name or first initial and last name in combination
+        with any one or more of other data elements considered PII, will be considered
+        PII.  \n**Source:** http://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=2702&ChapAct=815%C2%A0ILCS%C2%A0530/&ChapterID=67&ChapterName=BUSINESS+TRANSACTIONS&ActName=Personal+Information+Protection+Act."
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "4"
+      - "5"
+      - "14"
+      - "21"
+      - "22"
+      - "3"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 515
+        }
+      }
+  "14":
+    id: "14"
+    taskid: 5d1d9e81-a7c1-4c20-8975-30e0c5a35162
+    type: regular
+    task:
+      id: 5d1d9e81-a7c1-4c20-8975-30e0c5a35162
+      version: -1
+      name: Does data contain state ID information?
+      description: "Driver's license number or State identification card number.  \n**Source:**
+        http://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=2702&ChapAct=815%C2%A0ILCS%C2%A0530/&ChapterID=67&ChapterName=BUSINESS+TRANSACTIONS&ActName=Personal+Information+Protection+Act."
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "24"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 690
+        }
+      }
+  "15":
+    id: "15"
+    taskid: 28f17d8e-4470-496a-8473-7265ec7e34d2
+    type: regular
+    task:
+      id: 28f17d8e-4470-496a-8473-7265ec7e34d2
+      version: -1
+      name: Does data contain account information?
+      description: "User name or email address, in combination with a password or
+        security question and answer that would permit access to an online account,
+        when either the user name or email address or password or security question
+        and answer are not encrypted or redacted or are encrypted or redacted but
+        the keys to unencrypt or unredact or otherwise read the data elements have
+        been obtained through the breach of security.  \n**Source:** http://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=2702&ChapAct=815%C2%A0ILCS%C2%A0530/&ChapterID=67&ChapterName=BUSINESS+TRANSACTIONS&ActName=Personal+Information+Protection+Act."
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "16"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 1010
+        }
+      }
+  "16":
+    id: "16"
+    taskid: dffbaaa2-fa3e-40fd-8429-5a2019c56a39
+    type: regular
+    task:
+      id: dffbaaa2-fa3e-40fd-8429-5a2019c56a39
+      version: -1
+      name: Does data contain any other PII?
+      description: "Use the below definitions of PII to discern whether breached data
+        has any PII.  \n**PII:** Information that can be used on its own or with other
+        information to identify, contact, or locate a single person, or to identify
+        an individual in context.  \n**US -NIST:** Information which can be used to
+        distinguish or trace an individual's identity, such as their name, social
+        security number, biometric records, etc. alone, or when combined with other
+        personal or identifying information which is linked or linkable to a specific
+        individual, such as date and place of birth, mother’s maiden name, etc.  \n**Source:**
+        The Deloitte document has an appendix table for PII."
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "17"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 1185
+        }
+      }
+  "17":
+    id: "17"
+    taskid: 51b93fd8-4841-43f4-891f-0a3ea7e8714c
+    type: condition
+    task:
+      id: 51b93fd8-4841-43f4-891f-0a3ea7e8714c
+      version: -1
+      name: Does data contain PII?
+      description: "If yes, set incident severity to medium and close incident.  \nIf
+        no, close incident."
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "20"
+      "Yes":
+      - "18"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 1360
+        }
+      }
+  "18":
+    id: "18"
+    taskid: 637cb0ad-2d36-40d4-8903-9e8749b03da4
+    type: regular
+    task:
+      id: 637cb0ad-2d36-40d4-8903-9e8749b03da4
+      version: -1
+      name: Set the flag IsPIICompromised - true
+      description: Store the fact that data set has PII in context.
+      scriptName: Set
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      append: {}
+      key:
+        simple: IsPIICompromised
+      value:
+        simple: "true"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 1535
+        }
+      }
+  "20":
+    id: "20"
+    taskid: 7a5a4de8-3e89-4bcd-8039-dc797fe4129b
+    type: regular
+    task:
+      id: 7a5a4de8-3e89-4bcd-8039-dc797fe4129b
+      version: -1
+      name: Set the flag IsPIICompromised - false
+      description: Data does not contain PII, so the value is set to false.
+      scriptName: Set
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      append: {}
+      key:
+        simple: IsPIICompromised
+      value:
+        simple: "false"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1340,
+          "y": 1535
+        }
+      }
+  "21":
+    id: "21"
+    taskid: 330f451b-9c84-4c0c-83c6-71cb0a2f2257
+    type: regular
+    task:
+      id: 330f451b-9c84-4c0c-83c6-71cb0a2f2257
+      version: -1
+      name: Does data contain unique biometric information?
+      description: "Unique biometric data generated from measurements or technical
+        analysis of human body characteristics used by the owner or licensee to authenticate
+        an individual, such as a fingerprint, retina or iris image, or other unique
+        physical representation or digital representation of biometric data.  \n**Source:**
+        http://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=2702&ChapAct=815%C2%A0ILCS%C2%A0530/&ChapterID=67&ChapterName=BUSINESS+TRANSACTIONS&ActName=Personal+Information+Protection+Act."
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "24"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1770,
+          "y": 690
+        }
+      }
+  "22":
+    id: "22"
+    taskid: 041ff829-ee53-4e6f-82d3-efaeda6ea0f4
+    type: regular
+    task:
+      id: 041ff829-ee53-4e6f-82d3-efaeda6ea0f4
+      version: -1
+      name: Does data contain Social Security Numbers?
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "24"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 2200,
+          "y": 690
+        }
+      }
+  "23":
+    id: "23"
+    taskid: e27da3c9-01b9-49b2-83b4-b8ae19da2be7
+    type: title
+    task:
+      id: e27da3c9-01b9-49b2-83b4-b8ae19da2be7
+      version: -1
+      name: Personal Information - Definition 1
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "11"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 370
+        }
+      }
+  "24":
+    id: "24"
+    taskid: 643d35dc-b500-4fd4-84b9-4172a66d81d9
+    type: title
+    task:
+      id: 643d35dc-b500-4fd4-84b9-4172a66d81d9
+      version: -1
+      name: Personal Information - Definition 2
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "15"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 865
+        }
+      }
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 1580,
+        "width": 2530,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
+inputs: []
+outputs: []

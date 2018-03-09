@@ -1,0 +1,689 @@
+id: cc2c9459-3500-4b50-8c02-647656f4dc5e
+version: 17
+name: Breach Notification Playbook - Illinois
+description: "This playbook helps the analyst check if the breached data meets the
+  criteria for breach notification according to Illinois law, and follows through
+  with notification procedures if it does.  \n  \n**Source:** http://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=2702&ChapAct=815%C2%A0ILCS%C2%A0530/&ChapterID=67&ChapterName=BUSINESS+TRANSACTIONS&ActName=Personal+Information+Protection+Act.
+  \ \nhttps://www.mintz.com/newsletter/2007/PrivSec-DataBreachLaws-02-07/state_data_breach_matrix.pdf"
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: 24798629-6129-4c9a-89d8-f955594be016
+    type: start
+    task:
+      id: 24798629-6129-4c9a-89d8-f955594be016
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "40"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 50
+        }
+      }
+  "3":
+    id: "3"
+    taskid: bd9cbaf2-c3ed-4a90-8949-484a1352fb22
+    type: condition
+    task:
+      id: bd9cbaf2-c3ed-4a90-8949-484a1352fb22
+      version: -1
+      name: Does data contain PII?
+      description: "If no, close incident.  \nIf yes, continue investigation."
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "4"
+      "Yes":
+      - "14"
+    separatecontext: false
+    conditions:
+    - label: "yes"
+      condition:
+      - - operator: string.isEqual
+          left:
+            value:
+              simple: IsPIICompromised
+            iscontext: true
+          right:
+            value:
+              simple: "true"
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 720
+        }
+      }
+  "4":
+    id: "4"
+    taskid: dcfec297-dc4c-4af6-8a19-9cae9dbcc812
+    type: regular
+    task:
+      id: dcfec297-dc4c-4af6-8a19-9cae9dbcc812
+      version: -1
+      name: Close Incident
+      description: There was no PII data located in the incident.
+      scriptName: CloseInvestigation
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      notes:
+        simple: There was no PII data located in the incident.
+      reason: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 895
+        }
+      }
+  "11":
+    id: "11"
+    taskid: 92680ef7-6427-47b4-8192-eab809c1abd4
+    type: regular
+    task:
+      id: 92680ef7-6427-47b4-8192-eab809c1abd4
+      version: -1
+      name: Inform management through email
+      description: Inform management through email about the breach. Escalate according
+        to organizational policy.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "26"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 1420
+        }
+      }
+  "13":
+    id: "13"
+    taskid: 6c1c10dc-14c6-4025-8960-5d56668ca07c
+    type: title
+    task:
+      id: 6c1c10dc-14c6-4025-8960-5d56668ca07c
+      version: -1
+      name: Send Breach Notification
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "18"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 1085
+        }
+      }
+  "14":
+    id: "14"
+    taskid: d40df4df-42d9-4f9f-8d9d-7d707a5febc1
+    type: condition
+    task:
+      id: d40df4df-42d9-4f9f-8d9d-7d707a5febc1
+      version: -1
+      name: Does breach contain Illinois resident information?
+      description: "Illinois breach notification laws come into effect only if data
+        of Illinois residents has been breached. \n\nIf yes, continue investigation.
+        \nIf no, decide on further course of action.  "
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "15"
+      "Yes":
+      - "13"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 895
+        }
+      }
+  "15":
+    id: "15"
+    taskid: c9ff14f3-07ba-4332-86e7-f6bdc75d2877
+    type: regular
+    task:
+      id: c9ff14f3-07ba-4332-86e7-f6bdc75d2877
+      version: -1
+      name: Analyst review
+      description: The breach does not contain Illinois resident information. Please
+        review which state information the breach contains, and start measures according
+        to the laws of that particular state.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "16"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 1070
+        }
+      }
+  "16":
+    id: "16"
+    taskid: b5e3dc27-d54a-48ef-8ae8-a96dc6cbd1f8
+    type: regular
+    task:
+      id: b5e3dc27-d54a-48ef-8ae8-a96dc6cbd1f8
+      version: -1
+      name: Close Incident
+      description: 'The breach does not contain Illinois resident information, so
+        this incident can be closed. '
+      scriptName: CloseInvestigation
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      notes:
+        simple: 'The breach does not contain Illinois resident information, so this
+          incident can be closed. '
+      reason: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 1245
+        }
+      }
+  "18":
+    id: "18"
+    taskid: 1188ab95-acab-43d0-8362-5ddf90e4fda8
+    type: regular
+    task:
+      id: 1188ab95-acab-43d0-8362-5ddf90e4fda8
+      version: -1
+      name: 'Set Incident severity to high '
+      description: This is a serious breach, and notifications to the residents will
+        be needed, as taken care of by the following steps.
+      scriptName: IncidentSet
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "11"
+    scriptarguments:
+      addLabels: {}
+      customFieldName: {}
+      customFieldValue: {}
+      details: {}
+      labels: {}
+      name: {}
+      owner: {}
+      playbook: {}
+      severity:
+        simple: high
+      stage: {}
+      type: {}
+      updatePlaybookForType: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 1245
+        }
+      }
+  "26":
+    id: "26"
+    taskid: b036a048-1e91-42ce-86ab-bbaf9a60d98d
+    type: condition
+    task:
+      id: b036a048-1e91-42ce-86ab-bbaf9a60d98d
+      version: -1
+      name: Does law enforcement require delaying breach notification?
+      description: "According to Illinois law, breach notification may be delayed
+        if a law enforcement agency determines that the notification will impede a
+        criminal investigation.  \n\n\n**Source:** http://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=2702&ChapAct=815%C2%A0ILCS%C2%A0530/&ChapterID=67&ChapterName=BUSINESS+TRANSACTIONS&ActName=Personal+Information+Protection+Act. "
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "31"
+      "Yes":
+      - "27"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 1595
+        }
+      }
+  "27":
+    id: "27"
+    taskid: 2223360b-46e8-4fd8-8b06-9ffceaf23a42
+    type: regular
+    task:
+      id: 2223360b-46e8-4fd8-8b06-9ffceaf23a42
+      version: -1
+      name: Wait to hear back from law enforcement
+      description: |-
+        Breach notification shall be made promptly after the law enforcement agency determines that it will not compromise the investigation.
+
+        **The notification must happen without unreasonable delay.**
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "31"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 592.5,
+          "y": 1770
+        }
+      }
+  "30":
+    id: "30"
+    taskid: 5be079dd-bf5b-4c48-8df7-5d99fdeb698e
+    type: condition
+    task:
+      id: 5be079dd-bf5b-4c48-8df7-5d99fdeb698e
+      version: -1
+      name: Is the cost of reaching out to residents more than $250,000 OR Are more
+        than 500,000 residents impacted OR Do you not have enough contact information?
+      description: If these conditions are met, the organization can request for a
+        substitute notification.
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "32"
+      "Yes":
+      - "33"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 2120
+        }
+      }
+  "31":
+    id: "31"
+    taskid: 991825d5-8db7-4ee0-87b2-728d6acab052
+    type: regular
+    task:
+      id: 991825d5-8db7-4ee0-87b2-728d6acab052
+      version: -1
+      name: Prepare notification for impacted residents
+      description: "**Source:** http://www.ilga.gov/legislation/ilcs/ilcs3.asp?ActID=2702&ChapAct=815%C2%A0ILCS%C2%A0530/&ChapterID=67&ChapterName=BUSINESS+TRANSACTIONS&ActName=Personal+Information+Protection+Act.
+        \ \nThe disclosure notification to an Illinois resident shall include, but
+        need not be limited to, information as follows: \n        (1) With respect
+        to personal information as defined in Section 5 in paragraph (1) of the definition
+        of \"personal information\":\n            (i) the toll-free numbers and addresses
+        for consumer reporting agencies;\n            (ii) the toll-free number, address,
+        and website address for the Federal Trade Commission; and\n            (iii)
+        a statement that the individual can obtain information from these sources
+        about fraud alerts and security freezes.\n        (2) With respect to personal
+        information defined in Section 5 in paragraph (2) of the definition of \"personal
+        information\", notice may be provided in electronic or other form directing
+        the Illinois resident whose personal information has been breached to promptly
+        change his or her user name or password and security question or answer, as
+        applicable, or to take other steps appropriate to protect all online accounts
+        for which the resident uses the same user name or email address and password
+        or security question and answer.  \nThe notification SHALL NOT, however, include
+        information concerning the number of Illinois residents affected by the breach."
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "30"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 1945
+        }
+      }
+  "32":
+    id: "32"
+    taskid: 8ddeb1ef-1946-496d-885d-6d8d8248aa36
+    type: regular
+    task:
+      id: 8ddeb1ef-1946-496d-885d-6d8d8248aa36
+      version: -1
+      name: Send notification to residents
+      description: "Choose among the following:  \n(1) written notice;  \n(2) electronic
+        notice, if the notice provided is consistent with the provisions regarding
+        electronic records and signatures for notices legally required to be in writing
+        as set forth in Section 7001 of Title 15 of the United States Code; or"
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "35"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 2295
+        }
+      }
+  "33":
+    id: "33"
+    taskid: ba78f864-6261-44c5-83fe-bb7d2f260b8b
+    type: regular
+    task:
+      id: ba78f864-6261-44c5-83fe-bb7d2f260b8b
+      version: -1
+      name: Implement substitute resident notification
+      description: "Must contain all of the following:  \n* Email notice.\n* Conspicuous,
+        highly-visible notice on the company website for 30 days.\n* Notification
+        to major state-wide media.  "
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "35"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 2295
+        }
+      }
+  "35":
+    id: "35"
+    taskid: 2f5be5d7-778d-41ce-851b-04a561d4fb96
+    type: title
+    task:
+      id: 2f5be5d7-778d-41ce-851b-04a561d4fb96
+      version: -1
+      name: Corrective action for breached accounts
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "36"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 2470
+        }
+      }
+  "36":
+    id: "36"
+    taskid: e310f62a-c361-456b-8bdd-b74fc63b91af
+    type: condition
+    task:
+      id: e310f62a-c361-456b-8bdd-b74fc63b91af
+      version: -1
+      name: Does breach data contain user account details?
+      description: |-
+        If yes, work on resetting user passwords.
+        If no, continue with investigation.
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "38"
+      "Yes":
+      - "37"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 2615
+        }
+      }
+  "37":
+    id: "37"
+    taskid: e1b1c9a2-050e-46f2-86f7-8e851f9ca982
+    type: regular
+    task:
+      id: e1b1c9a2-050e-46f2-86f7-8e851f9ca982
+      version: -1
+      name: Reset user passwords
+      description: Activate a 'reset password' process for all affected accounts.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "38"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 592.5,
+          "y": 2790
+        }
+      }
+  "38":
+    id: "38"
+    taskid: 83cce46c-0d87-4900-8e4f-e573f508730d
+    type: regular
+    task:
+      id: 83cce46c-0d87-4900-8e4f-e573f508730d
+      version: -1
+      name: Consider free services for impacted users
+      description: 'Management should consider providing free identity protection
+        services to impacted users if required. '
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "39"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 2965
+        }
+      }
+  "39":
+    id: "39"
+    taskid: dae328b5-aec2-44b4-8c79-243ec5520975
+    type: regular
+    task:
+      id: dae328b5-aec2-44b4-8c79-243ec5520975
+      version: -1
+      name: Close Incident
+      description: The breach notification procedures have been followed and this
+        incident can be closed.
+      scriptName: CloseInvestigation
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      notes:
+        simple: The breach notification procedures have been followed and this incident
+          can be closed.
+      reason: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 3140
+        }
+      }
+  "40":
+    id: "40"
+    taskid: e5a6a18f-4e27-419c-8697-e753a4705fb2
+    type: condition
+    task:
+      id: e5a6a18f-4e27-419c-8697-e753a4705fb2
+      version: -1
+      name: Is breached data encrypted?
+      description: Check if breached data has been encrypted. If breached data is
+        encrypted and the encryption has not been compromised, there is no need for
+        breach notification.
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "44"
+      "Yes":
+      - "41"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 195
+        }
+      }
+  "41":
+    id: "41"
+    taskid: 35df8394-75a4-4ac1-8252-c79097837de1
+    type: condition
+    task:
+      id: 35df8394-75a4-4ac1-8252-c79097837de1
+      version: -1
+      name: Has encryption been compromised?
+      description: Are the encryption keys or the encrypted data compromised in any
+        way?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "42"
+      "Yes":
+      - "44"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 60,
+          "y": 370
+        }
+      }
+  "42":
+    id: "42"
+    taskid: 95911f1e-ecc7-46df-863b-b2be579e72b4
+    type: regular
+    task:
+      id: 95911f1e-ecc7-46df-863b-b2be579e72b4
+      version: -1
+      name: Analyst review
+      description: The breached data was encrypted and the encryption has not been
+        compromised yet. Please decide how you would like to proceed with this investigation.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "43"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 545
+        }
+      }
+  "43":
+    id: "43"
+    taskid: 6a7bef03-6181-4667-8d3b-6eb46cb80383
+    type: regular
+    task:
+      id: 6a7bef03-6181-4667-8d3b-6eb46cb80383
+      version: -1
+      name: Close Incident
+      description: The breached data is encrypted and the encryption has not been
+        compromised, so this investigation can be closed.
+      scriptName: CloseInvestigation
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      notes:
+        simple: The breached data is encrypted and the encryption has not been compromised,
+          so this investigation can be closed.
+      reason: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 720
+        }
+      }
+  "44":
+    id: "44"
+    taskid: f1deaf5a-61aa-4816-8f9e-bf4bf4f3a406
+    type: playbook
+    task:
+      id: f1deaf5a-61aa-4816-8f9e-bf4bf4f3a406
+      version: -1
+      name: PII Check Playbook - Illinois
+      playbookName: PII Check Playbook - Illinois
+      type: playbook
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "3"
+    separatecontext: true
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 545
+        }
+      }
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 3185,
+        "width": 1240,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
+inputs: []
+outputs: []

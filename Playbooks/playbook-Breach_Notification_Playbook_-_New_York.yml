@@ -1,0 +1,979 @@
+id: a6623539-7ad7-4c10-8027-25c9faa9228b
+version: 22
+name: Breach Notification Playbook - New York
+description: "This playbook helps the analyst check if the breached data meets the
+  criteria for breach notification according to New York law, and follows through
+  with notification procedures if it does.  \n**Sources**: https://ag.ny.gov/internet/data-breach
+  \n \nhttps://its.ny.gov/breach-notification"
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: 24798629-6129-4c9a-89d8-f955594be016
+    type: start
+    task:
+      id: 24798629-6129-4c9a-89d8-f955594be016
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "40"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 50
+        }
+      }
+  "3":
+    id: "3"
+    taskid: 1e08c963-1d67-4c2c-8026-fa127517addc
+    type: condition
+    task:
+      id: 1e08c963-1d67-4c2c-8026-fa127517addc
+      version: -1
+      name: Does data contain PII?
+      description: "If no, close incident.  \nIf yes, continue investigation."
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "4"
+      "Yes":
+      - "14"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 720
+        }
+      }
+  "4":
+    id: "4"
+    taskid: e62093d4-94bf-4a48-87a0-ace1bbe09b84
+    type: regular
+    task:
+      id: e62093d4-94bf-4a48-87a0-ace1bbe09b84
+      version: -1
+      name: Close Incident
+      description: There was no PII data located in the incident.
+      scriptName: CloseInvestigation
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      notes:
+        simple: There was no PII data located in the incident.
+      reason: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1340,
+          "y": 895
+        }
+      }
+  "8":
+    id: "8"
+    taskid: a236410e-8f7a-44f1-8c6f-5d5c7cdbd6b0
+    type: condition
+    task:
+      id: a236410e-8f7a-44f1-8c6f-5d5c7cdbd6b0
+      version: -1
+      name: Check number of affected data subjects
+      description: New York law mandates different responses if the number of affected
+        data subjects is greater than 5000.
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      Less than 5000:
+      - "45"
+      More than 5000:
+      - "18"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 1245
+        }
+      }
+  "11":
+    id: "11"
+    taskid: e6948122-c553-450b-87d2-bfff5034e3ab
+    type: regular
+    task:
+      id: e6948122-c553-450b-87d2-bfff5034e3ab
+      version: -1
+      name: Inform management through email
+      description: Inform management through email about the breach. Escalate according
+        to organizational policy.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "48"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 2965
+        }
+      }
+  "13":
+    id: "13"
+    taskid: 66fbe8eb-5e1d-4990-87e6-b018b0af2328
+    type: title
+    task:
+      id: 66fbe8eb-5e1d-4990-87e6-b018b0af2328
+      version: -1
+      name: Breach Notification Needed
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "8"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 1085
+        }
+      }
+  "14":
+    id: "14"
+    taskid: 86b9f9ff-82e9-4b84-8110-ac720f1b1f0a
+    type: condition
+    task:
+      id: 86b9f9ff-82e9-4b84-8110-ac720f1b1f0a
+      version: -1
+      name: Does breach contain New York resident information?
+      description: "New York breach notification laws come into effect only if data
+        of New York residents has been breached. \n\nIf yes, continue investigation.
+        \nIf no, decide on further course of action.  "
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "15"
+      "Yes":
+      - "13"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 895
+        }
+      }
+  "15":
+    id: "15"
+    taskid: 0d6528ac-fac0-4814-8492-fdfb8b45e185
+    type: regular
+    task:
+      id: 0d6528ac-fac0-4814-8492-fdfb8b45e185
+      version: -1
+      name: Analyst review
+      description: The breach does not contain New York resident information. Please
+        review which state information the breach contains, and start measures according
+        to the laws of that particular state.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "16"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 1070
+        }
+      }
+  "16":
+    id: "16"
+    taskid: a5662cb5-bbcc-478b-881e-7e0ff86040a4
+    type: regular
+    task:
+      id: a5662cb5-bbcc-478b-881e-7e0ff86040a4
+      version: -1
+      name: Close Incident
+      description: 'The breach does not contain New York resident information, so
+        this incident can be closed. '
+      scriptName: CloseInvestigation
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      notes:
+        simple: 'The breach does not contain New York resident information, so this
+          incident can be closed. '
+      reason: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 1245
+        }
+      }
+  "18":
+    id: "18"
+    taskid: 5b3d515d-2b8d-4558-896b-bda50d124427
+    type: regular
+    task:
+      id: 5b3d515d-2b8d-4558-896b-bda50d124427
+      version: -1
+      name: 'Set Incident severity to high '
+      description: This is a serious breach, and notifications to the authorities
+        will be needed, as taken care of by the following steps.
+      scriptName: IncidentSet
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "19"
+    scriptarguments:
+      addLabels: {}
+      customFieldName: {}
+      customFieldValue: {}
+      details: {}
+      labels: {}
+      name: {}
+      owner: {}
+      playbook: {}
+      severity:
+        simple: high
+      stage: {}
+      type: {}
+      updatePlaybookForType: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 1420
+        }
+      }
+  "19":
+    id: "19"
+    taskid: 4b56e161-26cf-4ecf-89c8-ae78ba43273d
+    type: regular
+    task:
+      id: 4b56e161-26cf-4ecf-89c8-ae78ba43273d
+      version: -1
+      name: Assemble a list of all the breached PII
+      description: Assemble a list of all breached PII as found in the PII Check task.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "23"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 1595
+        }
+      }
+  "23":
+    id: "23"
+    taskid: d15dcc4e-5dee-4acb-8e84-06264338e29c
+    type: regular
+    task:
+      id: d15dcc4e-5dee-4acb-8e84-06264338e29c
+      version: -1
+      name: Prepare information report to be presented to authorities
+      description: "**Template:** https://its.ny.gov/sites/default/files/documents/business-data-breach-form.pdf
+        \ \n"
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "24"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 1770
+        }
+      }
+  "24":
+    id: "24"
+    taskid: 22d6668c-fab7-45c7-8735-6c56fd2fdde4
+    type: regular
+    task:
+      id: 22d6668c-fab7-45c7-8735-6c56fd2fdde4
+      version: -1
+      name: Notify management with the severity of data breach
+      description: "Stakeholders to be included:  \n•\tCISO\n•\tPrivacy officer\n•\tOrganization
+        legal VP\n•\tMarketing VP\n•\tAccounting VP\n•\tPublic relations VP\n•\tOrganization's
+        external legal adviser  \nThis may change according to organizational policy.
+        \n"
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "25"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 1945
+        }
+      }
+  "25":
+    id: "25"
+    taskid: 31a5b0de-9bb4-4cb4-8b66-68d5f6c44525
+    type: title
+    task:
+      id: 31a5b0de-9bb4-4cb4-8b66-68d5f6c44525
+      version: -1
+      name: Send Breach Notification
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "26"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 2120
+        }
+      }
+  "26":
+    id: "26"
+    taskid: ca7e85be-1ca8-4c92-8687-d2425f726a59
+    type: condition
+    task:
+      id: ca7e85be-1ca8-4c92-8687-d2425f726a59
+      version: -1
+      name: Does law enforcement require delaying breach notification?
+      description: "**Source:** https://ag.ny.gov/internet/data-breach  \nAccording
+        to New York law, breach notification may be delayed if a law enforcement agency
+        determines that the notification will impede a criminal investigation. "
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "28"
+      "Yes":
+      - "27"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 2265
+        }
+      }
+  "27":
+    id: "27"
+    taskid: fbab63cb-8674-4754-86c8-9400a6daead2
+    type: regular
+    task:
+      id: fbab63cb-8674-4754-86c8-9400a6daead2
+      version: -1
+      name: Wait to hear back from law enforcement
+      description: "Breach notification shall be made promptly after the law enforcement
+        agency determines that it will not compromise the investigation.  \n**The
+        notification must happen without unreasonable delay.**"
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "28"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 367.5,
+          "y": 2440
+        }
+      }
+  "28":
+    id: "28"
+    taskid: bb895f6a-04ca-4dcd-8afa-92135adab741
+    type: regular
+    task:
+      id: bb895f6a-04ca-4dcd-8afa-92135adab741
+      version: -1
+      name: Send breach notification
+      description: "**Template:** https://its.ny.gov/sites/default/files/documents/business-data-breach-form.pdf
+        \ \nReport to:  \n\n**New York State\nOffice of the Attorney General**\nSECURITY
+        BREACH NOTIFICATION\nConsumer Frauds &\nProtection Bureau\n120 Broadway -
+        3rd Floor\nNew York, NY 10271\nFax: 212-416-6003\nE-mail: breach.security@ag.ny.gov
+        \ \n**New York State\nDivision of State Police**\nNew York State Intelligence
+        Center\nSECURITY BREACH NOTIFICATION\n31 Tech Valley Drive, Second Floor\nEast
+        Greenbush, NY 12061\nFax: 518-786-9398\nE-mail: risk@nysic.gov  \n**New York\nDepartment
+        of State**\nDivision of Consumer Protection\nSECURITY BREACH NOTIFICATION\nOne
+        Commerce Plaza\n99 Washington Ave., Suite 640\nAlbany, NY 12231\nFax: 518-473-9055\nE-mail:
+        security_breach_notification@dos.ny.gov"
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "29"
+      - "46"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 2615
+        }
+      }
+  "29":
+    id: "29"
+    taskid: 7025abf6-b0f6-4b26-898c-75a57bbf0da3
+    type: title
+    task:
+      id: 7025abf6-b0f6-4b26-898c-75a57bbf0da3
+      version: -1
+      name: Notify Residents
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "31"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 2805
+        }
+      }
+  "30":
+    id: "30"
+    taskid: 3c3b521b-2ebe-4e88-8381-d228d6ee21d0
+    type: condition
+    task:
+      id: 3c3b521b-2ebe-4e88-8381-d228d6ee21d0
+      version: -1
+      name: Is the cost of reaching out to residents more than $250,000 OR Are more
+        than 500,000 residents impacted OR Do you not have sufficient contact information?
+      description: If these conditions are met, the organization can request for a
+        substitute notification.
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "32"
+      "Yes":
+      - "33"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 3140
+        }
+      }
+  "31":
+    id: "31"
+    taskid: 53645cc5-f1aa-4e36-8b6e-a0b1ff59fee5
+    type: regular
+    task:
+      id: 53645cc5-f1aa-4e36-8b6e-a0b1ff59fee5
+      version: -1
+      name: Prepare notification for impacted residents
+      description: "Notice shall contain a description of the types of information
+        believed to have been acquired by a person without valid authorization and
+        your contact information so that affected New York State residents may contact
+        you about the data breach. \n \n**Source:** https://www.dos.ny.gov/consumerprotection/pdf/infosecbreach03.pdf "
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "30"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 2965
+        }
+      }
+  "32":
+    id: "32"
+    taskid: 94e923f8-581d-4290-8d74-b525cbba3524
+    type: regular
+    task:
+      id: 94e923f8-581d-4290-8d74-b525cbba3524
+      version: -1
+      name: Send notifications to residents
+      description: 'Notification can be made by any one of the following methods:
+        written, electronic (but only with consent of the person you are notifying)
+        or by telephone.'
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "35"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 3315
+        }
+      }
+  "33":
+    id: "33"
+    taskid: 46598d58-0645-4e36-8b89-aa2f1165bbef
+    type: regular
+    task:
+      id: 46598d58-0645-4e36-8b89-aa2f1165bbef
+      version: -1
+      name: Implement substitute resident notification
+      description: "Must contain all of the following:  \n* Email notice.\n* Conspicuous,
+        highly-visible notice on the company website for 30 days.\n* Notification
+        to major state-wide media.  \n**Source:** https://www.dos.ny.gov/consumerprotection/pdf/infosecbreach03.pdf"
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "35"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 3315
+        }
+      }
+  "35":
+    id: "35"
+    taskid: 2f5be5d7-778d-41ce-851b-04a561d4fb96
+    type: title
+    task:
+      id: 2f5be5d7-778d-41ce-851b-04a561d4fb96
+      version: -1
+      name: Corrective action for breached accounts
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "36"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 3490
+        }
+      }
+  "36":
+    id: "36"
+    taskid: 10ca4523-ecdf-4a37-83e5-b7a1010c0bbb
+    type: condition
+    task:
+      id: 10ca4523-ecdf-4a37-83e5-b7a1010c0bbb
+      version: -1
+      name: Does breach data contain user account details?
+      description: |-
+        If yes, work on resetting user passwords.
+        If no, continue with investigation.
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "38"
+      "Yes":
+      - "37"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 3635
+        }
+      }
+  "37":
+    id: "37"
+    taskid: bdb746a4-a3c4-4a2b-842c-7ee716616175
+    type: regular
+    task:
+      id: bdb746a4-a3c4-4a2b-842c-7ee716616175
+      version: -1
+      name: Reset user passwords
+      description: Activate a 'reset password' process for all affected accounts.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "38"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 807.5,
+          "y": 3810
+        }
+      }
+  "38":
+    id: "38"
+    taskid: c9ca5ace-b6c0-4a62-85a1-7f949b9a206e
+    type: regular
+    task:
+      id: c9ca5ace-b6c0-4a62-85a1-7f949b9a206e
+      version: -1
+      name: Consider free services for impacted users
+      description: 'Management should consider providing free identity protection
+        services to impacted users if required. '
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "39"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 3985
+        }
+      }
+  "39":
+    id: "39"
+    taskid: 86e55d74-b33d-4865-8036-d09bd881d926
+    type: regular
+    task:
+      id: 86e55d74-b33d-4865-8036-d09bd881d926
+      version: -1
+      name: Close Incident
+      description: The breach notification procedures have been followed and this
+        incident can be closed.
+      scriptName: CloseInvestigation
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      notes:
+        simple: The breach notification procedures have been followed and this incident
+          can be closed.
+      reason: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 4160
+        }
+      }
+  "40":
+    id: "40"
+    taskid: 1cdbfe31-72e8-4ee4-8431-1eab17a036e9
+    type: condition
+    task:
+      id: 1cdbfe31-72e8-4ee4-8431-1eab17a036e9
+      version: -1
+      name: Is breached data encrypted?
+      description: Check if breached data has been encrypted. If breached data is
+        encrypted and the encryption has not been compromised, there is no need for
+        breach notification.
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "44"
+      "Yes":
+      - "41"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 195
+        }
+      }
+  "41":
+    id: "41"
+    taskid: f4ddfc81-4aa6-4cc6-8983-bd2de5a9b5fb
+    type: condition
+    task:
+      id: f4ddfc81-4aa6-4cc6-8983-bd2de5a9b5fb
+      version: -1
+      name: Has encryption been compromised?
+      description: Are the encryption keys or the encrypted data compromised in any
+        way?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "42"
+      "Yes":
+      - "44"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 705,
+          "y": 370
+        }
+      }
+  "42":
+    id: "42"
+    taskid: 44b5672a-5128-49df-86c8-4eccae6d5bd5
+    type: regular
+    task:
+      id: 44b5672a-5128-49df-86c8-4eccae6d5bd5
+      version: -1
+      name: Analyst review
+      description: The breached data was encrypted and the encryption has not been
+        compromised yet. Please decide how you would like to proceed with this investigation.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "43"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 545
+        }
+      }
+  "43":
+    id: "43"
+    taskid: 3509087b-b6c3-4f55-8c4e-33eb82fd13e7
+    type: regular
+    task:
+      id: 3509087b-b6c3-4f55-8c4e-33eb82fd13e7
+      version: -1
+      name: Close Incident
+      description: The breached data is encrypted and the encryption has not been
+        compromised, so this investigation can be closed.
+      scriptName: CloseInvestigation
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      notes:
+        simple: The breached data is encrypted and the encryption has not been compromised,
+          so this investigation can be closed.
+      reason: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 720
+        }
+      }
+  "44":
+    id: "44"
+    taskid: 462585dd-36e1-4e42-85f5-23cd91b1b1af
+    type: regular
+    task:
+      id: 462585dd-36e1-4e42-85f5-23cd91b1b1af
+      version: -1
+      name: Check if breached data has PII
+      description: "Under NY law, private information means any personal information
+        concerning a natural person in combination with any one or more of the following
+        data elements: social security number, driver’s license number, account number,
+        or credit or debit card number in combination with any required security code.
+        \ \n**Source:** https://www.dos.ny.gov/consumerprotection/pdf/infosecbreach03.pdf"
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "3"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 545
+        }
+      }
+  "45":
+    id: "45"
+    taskid: 27d1048e-cab8-477c-8919-8e8cc3d27e51
+    type: regular
+    task:
+      id: 27d1048e-cab8-477c-8919-8e8cc3d27e51
+      version: -1
+      name: Set Incident severity to medium
+      description: This is an incident of medium severity that does not require notification
+        to authorities. However, the breached users must be notified of the developments.
+      scriptName: IncidentSet
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "11"
+    scriptarguments:
+      addLabels: {}
+      customFieldName: {}
+      customFieldValue: {}
+      details: {}
+      labels: {}
+      name: {}
+      owner: {}
+      playbook: {}
+      severity:
+        simple: medium
+      stage: {}
+      type: {}
+      updatePlaybookForType: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 2790
+        }
+      }
+  "46":
+    id: "46"
+    taskid: 1fe0dff1-c2ed-432a-85be-518a8d64f08d
+    type: title
+    task:
+      id: 1fe0dff1-c2ed-432a-85be-518a8d64f08d
+      version: -1
+      name: Notify Credit Agencies
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "47"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 2805
+        }
+      }
+  "47":
+    id: "47"
+    taskid: a083b7b8-213b-4f29-80e3-d47401508ee0
+    type: regular
+    task:
+      id: a083b7b8-213b-4f29-80e3-d47401508ee0
+      version: -1
+      name: Send notifications to consumer rating agencies
+      description: "**Source:** https://ag.ny.gov/internet/data-breach  \nEQUIFAX\nEquifax:\nConsumer
+        Fraud Division\nP.O. Box 740256\nAtlanta, GA 30374\n800-525-6285\nsecurity.dataadministration@equifax.com
+        \ \nEXPERIAN\nConsumer Fraud Assistance\nP.O. Box 9556\nAllen, TX 75013\n888-397-3742\nbusinessrecordsvictimassistance@experian.com
+        \ \nTRANSUNION\nConsumer Relations & Fraud Victim Assistance\n1561 E. Orangethorpe
+        Ave.\nFullerton, CA 92831\nTel: 800-372-8391 fax: 714-680-7290\nFVAD@Transunion.com"
+      type: regular
+      iscommand: false
+      brand: ""
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 2965
+        }
+      }
+  "48":
+    id: "48"
+    taskid: 0e842d7f-59b0-41b6-81fa-5ff3a7c6d4aa
+    type: regular
+    task:
+      id: 0e842d7f-59b0-41b6-81fa-5ff3a7c6d4aa
+      version: -1
+      name: Prepare notification for impacted residents
+      description: "Notice shall contain a description of the types of information
+        believed to have been acquired by a person without valid authorization and
+        your contact information so that affected New York State residents may contact
+        you about the data breach. \n \n**Source:** https://www.dos.ny.gov/consumerprotection/pdf/infosecbreach03.pdf "
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "49"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 3140
+        }
+      }
+  "49":
+    id: "49"
+    taskid: 5d02cfc9-bbfd-4489-8a23-6f1d3742aea6
+    type: regular
+    task:
+      id: 5d02cfc9-bbfd-4489-8a23-6f1d3742aea6
+      version: -1
+      name: Send notifications to residents
+      description: 'Notification can be made by any one of the following methods:
+        written, electronic (but only with consent of the person you are notifying)
+        or by telephone.'
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "35"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 3315
+        }
+      }
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 4205,
+        "width": 1670,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
+inputs: []
+outputs: []

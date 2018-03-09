@@ -1,0 +1,735 @@
+id: d31657aa-9122-4a3c-8616-5930432a1387
+version: 2
+name: Breach Notification Playbook - Texas
+description: "This playbook helps the analyst check if the breached data meets the
+  criteria for breach notification according to Yexas law, and follows through with
+  notification procedures if it does.  \n**Sources**: http://www.statutes.legis.state.tx.us/Docs/BC/htm/BC.521.htm#00"
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: 24798629-6129-4c9a-89d8-f955594be016
+    type: start
+    task:
+      id: 24798629-6129-4c9a-89d8-f955594be016
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "40"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 50
+        }
+      }
+  "3":
+    id: "3"
+    taskid: dafd2ca8-d72c-409d-8162-2f91fe4cd41d
+    type: condition
+    task:
+      id: dafd2ca8-d72c-409d-8162-2f91fe4cd41d
+      version: -1
+      name: Does data contain PII?
+      description: "If no, close incident.  \nIf yes, continue investigation."
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "4"
+      "Yes":
+      - "14"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 720
+        }
+      }
+  "4":
+    id: "4"
+    taskid: ead59bdf-9ceb-4582-8c98-172193caf9fa
+    type: regular
+    task:
+      id: ead59bdf-9ceb-4582-8c98-172193caf9fa
+      version: -1
+      name: Close Incident
+      description: There was no PII data located in the incident.
+      scriptName: CloseInvestigation
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      notes:
+        simple: There was no PII data located in the incident.
+      reason: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 52,
+          "y": 895
+        }
+      }
+  "8":
+    id: "8"
+    taskid: ae7bc840-bc57-4a2c-8024-3d19870634c7
+    type: condition
+    task:
+      id: ae7bc840-bc57-4a2c-8024-3d19870634c7
+      version: -1
+      name: Check number of affected data subjects
+      description: Texas law mandates that credit rating agencies be informed if the
+        breach has more than 10,000 affected residents.
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      Less than 10000:
+      - "30"
+      More than 10000:
+      - "47"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 2120
+        }
+      }
+  "11":
+    id: "11"
+    taskid: 645eb1bf-d8dc-48e2-85c3-e454ddc576ff
+    type: regular
+    task:
+      id: 645eb1bf-d8dc-48e2-85c3-e454ddc576ff
+      version: -1
+      name: Inform management through email
+      description: Inform management through email about the breach. Escalate according
+        to organizational policy.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "26"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 1420
+        }
+      }
+  "13":
+    id: "13"
+    taskid: c37dd876-25cf-4ff3-8252-88dab3285577
+    type: title
+    task:
+      id: c37dd876-25cf-4ff3-8252-88dab3285577
+      version: -1
+      name: Send Breach Notification
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "18"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 1085
+        }
+      }
+  "14":
+    id: "14"
+    taskid: 68587bfd-cac7-425d-81c5-ebe209ab0f9c
+    type: condition
+    task:
+      id: 68587bfd-cac7-425d-81c5-ebe209ab0f9c
+      version: -1
+      name: Does breach contain Texas resident information?
+      description: "Texas breach notification laws come into effect if data of Texas
+        residents has been breached.\\\nTexas statute allows entities from states
+        other than Texas to provide notice to individuals under the other states’
+        law or under Texas law, provided the other state has regulations that require
+        notification of a breach to affected persons.\\\nIf yes, continue investigation.
+        \nIf no, decide on further course of action.\\\n**Source:** https://www.mintz.com/newsletter/2007/PrivSec-DataBreachLaws-02-07/state_data_breach_matrix.pdf
+        \ "
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "15"
+      "Yes":
+      - "13"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 895
+        }
+      }
+  "15":
+    id: "15"
+    taskid: 71d23ec7-c9ee-4e25-8748-decff814a1c3
+    type: regular
+    task:
+      id: 71d23ec7-c9ee-4e25-8748-decff814a1c3
+      version: -1
+      name: Analyst review
+      description: The breach does not contain Texas resident information. Please
+        review which state information the breach contains, and start measures according
+        to the laws of that particular state.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "16"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 1070
+        }
+      }
+  "16":
+    id: "16"
+    taskid: a083c780-be94-4d03-8889-80e0923950b1
+    type: regular
+    task:
+      id: a083c780-be94-4d03-8889-80e0923950b1
+      version: -1
+      name: Close Incident
+      description: 'The breach does not contain Nevada resident information, so this
+        incident can be closed. '
+      scriptName: CloseInvestigation
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      notes:
+        simple: 'The breach does not contain Texas resident information, so this incident
+          can be closed. '
+      reason: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 1245
+        }
+      }
+  "18":
+    id: "18"
+    taskid: 239e3a50-f7f2-497e-8cd7-856eef6a7784
+    type: regular
+    task:
+      id: 239e3a50-f7f2-497e-8cd7-856eef6a7784
+      version: -1
+      name: 'Set Incident severity to high '
+      description: This is a serious breach, and notifications to the residents will
+        be needed, as taken care of by the following steps.
+      scriptName: IncidentSet
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "11"
+    scriptarguments:
+      addLabels: {}
+      customFieldName: {}
+      customFieldValue: {}
+      details: {}
+      labels: {}
+      name: {}
+      owner: {}
+      playbook: {}
+      severity:
+        simple: high
+      stage: {}
+      type: {}
+      updatePlaybookForType: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 1245
+        }
+      }
+  "26":
+    id: "26"
+    taskid: 6c9587f6-2955-4412-8c85-600630ee667b
+    type: condition
+    task:
+      id: 6c9587f6-2955-4412-8c85-600630ee667b
+      version: -1
+      name: Does law enforcement require delaying breach notification?
+      description: "According to Texas law, breach notification may be delayed if
+        a law enforcement agency determines that the notification will impede a criminal
+        investigation. \n \n**Source:** http://www.statutes.legis.state.tx.us/Docs/BC/htm/BC.521.htm#00"
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "48"
+      "Yes":
+      - "27"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 1595
+        }
+      }
+  "27":
+    id: "27"
+    taskid: bc23b649-40c1-4f27-8805-e46b1de1c167
+    type: regular
+    task:
+      id: bc23b649-40c1-4f27-8805-e46b1de1c167
+      version: -1
+      name: Wait to hear back from law enforcement
+      description: |-
+        Breach notification shall be made promptly after the law enforcement agency determines that it will not compromise the investigation.
+
+        **The notification must happen without unreasonable delay.**
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "48"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 807.5,
+          "y": 1770
+        }
+      }
+  "30":
+    id: "30"
+    taskid: 2156dbeb-644d-4760-8b6a-edfb506cf202
+    type: condition
+    task:
+      id: 2156dbeb-644d-4760-8b6a-edfb506cf202
+      version: -1
+      name: Is the cost of reaching out to residents more than $250,000 OR Are more
+        than 500,000 residents impacted OR Do you not have sufficient contact information?
+      description: If these conditions are met, the organization can request for a
+        substitute notification.
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "32"
+      "Yes":
+      - "33"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 2470
+        }
+      }
+  "32":
+    id: "32"
+    taskid: c0bf692b-9580-4a5a-8a50-006e02990b56
+    type: regular
+    task:
+      id: c0bf692b-9580-4a5a-8a50-006e02990b56
+      version: -1
+      name: Send notifications to residents
+      description: |2-
+         A person may give notice by providing:\
+        (1)  written notice at the last known address of the individual;\
+        (2)  electronic notice, if the notice is provided in accordance with 15 U.S.C. Section 7001;\
+        **Source:** http://www.statutes.legis.state.tx.us/Docs/BC/htm/BC.521.htm#00
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "35"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 2645
+        }
+      }
+  "33":
+    id: "33"
+    taskid: 81f69503-91bf-4ab2-8c98-b7311a2d00f9
+    type: regular
+    task:
+      id: 81f69503-91bf-4ab2-8c98-b7311a2d00f9
+      version: -1
+      name: Implement substitute resident notification
+      description: |-
+        The notice may be given by:\
+        (1)  electronic mail, if the person has electronic mail addresses for the affected persons;\
+        (2)  conspicuous posting of the notice on the person's website; or\
+        (3)  notice published in or broadcast on major statewide media.\
+        **Source:** http://www.statutes.legis.state.tx.us/Docs/BC/htm/BC.521.htm#00
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "35"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 2645
+        }
+      }
+  "35":
+    id: "35"
+    taskid: 2f5be5d7-778d-41ce-851b-04a561d4fb96
+    type: title
+    task:
+      id: 2f5be5d7-778d-41ce-851b-04a561d4fb96
+      version: -1
+      name: Corrective action for breached accounts
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "36"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 2820
+        }
+      }
+  "36":
+    id: "36"
+    taskid: 14f55be6-f99c-4e34-8667-c93ceaee2209
+    type: condition
+    task:
+      id: 14f55be6-f99c-4e34-8667-c93ceaee2209
+      version: -1
+      name: Does breach data contain user account details?
+      description: |-
+        If yes, work on resetting user passwords.
+        If no, continue with investigation.
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "38"
+      "Yes":
+      - "37"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 2965
+        }
+      }
+  "37":
+    id: "37"
+    taskid: a28d6949-5a94-4f7e-8cc9-61d5375230c0
+    type: regular
+    task:
+      id: a28d6949-5a94-4f7e-8cc9-61d5375230c0
+      version: -1
+      name: Reset user passwords
+      description: Activate a 'reset password' process for all affected accounts.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "38"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 807.5,
+          "y": 3140
+        }
+      }
+  "38":
+    id: "38"
+    taskid: c9ca5ace-b6c0-4a62-85a1-7f949b9a206e
+    type: regular
+    task:
+      id: c9ca5ace-b6c0-4a62-85a1-7f949b9a206e
+      version: -1
+      name: Consider free services for impacted users
+      description: 'Management should consider providing free identity protection
+        services to impacted users if required. '
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "39"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 3315
+        }
+      }
+  "39":
+    id: "39"
+    taskid: 757e9c98-fe98-436c-822f-c7779020e69d
+    type: regular
+    task:
+      id: 757e9c98-fe98-436c-822f-c7779020e69d
+      version: -1
+      name: Close Incident
+      description: The breach notification procedures have been followed and this
+        incident can be closed.
+      scriptName: CloseInvestigation
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      notes:
+        simple: The breach notification procedures have been followed and this incident
+          can be closed.
+      reason: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 3490
+        }
+      }
+  "40":
+    id: "40"
+    taskid: 493218e1-0363-4c9e-80c1-8c90d4106b72
+    type: condition
+    task:
+      id: 493218e1-0363-4c9e-80c1-8c90d4106b72
+      version: -1
+      name: Is breached data encrypted?
+      description: Check if breached data has been encrypted. If breached data is
+        encrypted and the encryption has not been compromised, there is no need for
+        breach notification.
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "44"
+      "Yes":
+      - "41"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 195
+        }
+      }
+  "41":
+    id: "41"
+    taskid: fcc6511f-5681-4b6d-83e1-a54bf8b62dd9
+    type: condition
+    task:
+      id: fcc6511f-5681-4b6d-83e1-a54bf8b62dd9
+      version: -1
+      name: Has encryption been compromised?
+      description: Are the encryption keys or the encrypted data compromised in any
+        way?
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "No":
+      - "42"
+      "Yes":
+      - "44"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 685,
+          "y": 370
+        }
+      }
+  "42":
+    id: "42"
+    taskid: 89d0ec7c-3bb1-4361-8a41-c229a3e87cb8
+    type: regular
+    task:
+      id: 89d0ec7c-3bb1-4361-8a41-c229a3e87cb8
+      version: -1
+      name: Analyst review
+      description: The breached data was encrypted and the encryption has not been
+        compromised yet. Please decide how you would like to proceed with this investigation.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "43"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 545
+        }
+      }
+  "43":
+    id: "43"
+    taskid: a4f87628-0802-48c8-8a3c-978db5e8c0d3
+    type: regular
+    task:
+      id: a4f87628-0802-48c8-8a3c-978db5e8c0d3
+      version: -1
+      name: Close Incident
+      description: The breached data is encrypted and the encryption has not been
+        compromised, so this investigation can be closed.
+      scriptName: CloseInvestigation
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      notes:
+        simple: The breached data is encrypted and the encryption has not been compromised,
+          so this investigation can be closed.
+      reason: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 720
+        }
+      }
+  "44":
+    id: "44"
+    taskid: ab1bc5c3-1e80-4dde-82c3-f3ccdf823814
+    type: regular
+    task:
+      id: ab1bc5c3-1e80-4dde-82c3-f3ccdf823814
+      version: -1
+      name: Check if breached data has PII
+      description: |-
+        Under Texas law, PII is called "sensitive personal information" and means:\
+        (A)  an individual's first name or first initial and last name in combination with any one or more of the following items, if the name and the items are not encrypted:\
+        (i)  social security number;\
+        (ii)  driver's license number or government-issued identification number; or\
+        (iii)  account number or credit or debit card number in combination with any required security code, access code, or password that would permit access to an individual's financial account;\
+        OR\
+        (B)  information that identifies an individual and relates to:\
+        (i)  the physical or mental health or condition of the individual;\
+        (ii)  the provision of health care to the individual; or\
+        (iii)  payment for the provision of health care to the individual.\
+        **Source:** http://www.statutes.legis.state.tx.us/Docs/BC/htm/BC.521.htm#00
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "3"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 265,
+          "y": 545
+        }
+      }
+  "47":
+    id: "47"
+    taskid: 4469fad1-14af-4935-8f1c-e98f15bb0d50
+    type: regular
+    task:
+      id: 4469fad1-14af-4935-8f1c-e98f15bb0d50
+      version: -1
+      name: Send notifications to consumer rating agencies
+      description: "**Source:** http://www.statutes.legis.state.tx.us/Docs/BC/htm/BC.521.htm#00\nEQUIFAX\nEquifax:\nConsumer
+        Fraud Division\nP.O. Box 740256\nAtlanta, GA 30374\n800-525-6285\nsecurity.dataadministration@equifax.com
+        \ \nEXPERIAN\nConsumer Fraud Assistance\nP.O. Box 9556\nAllen, TX 75013\n888-397-3742\nbusinessrecordsvictimassistance@experian.com
+        \ \nTRANSUNION\nConsumer Relations & Fraud Victim Assistance\n1561 E. Orangethorpe
+        Ave.\nFullerton, CA 92831\nTel: 800-372-8391 fax: 714-680-7290\nFVAD@Transunion.com"
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "30"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 807.5,
+          "y": 2295
+        }
+      }
+  "48":
+    id: "48"
+    taskid: c9cde426-3d8b-4996-81c1-8d4162e9a01e
+    type: regular
+    task:
+      id: c9cde426-3d8b-4996-81c1-8d4162e9a01e
+      version: -1
+      name: Prepare notification for impacted residents
+      description: (Internal Note) No information/guidelines available about what
+        information should be included in the breach disclosure. Choose according
+        to organizational policy.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "8"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 1945
+        }
+      }
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 3535,
+        "width": 1238,
+        "x": 52,
+        "y": 50
+      }
+    }
+  }
+inputs: []
+outputs: []

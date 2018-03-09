@@ -1,0 +1,522 @@
+id: 4048aeaa-2ba0-4948-8737-50dd8daf37fb
+version: 22
+name: Breach Playbook - PII Check Playbook - California
+description: 'This playbook goes through a checklist to help the analyst discern whether
+  the breached data contains any Personally Identifiable Information (PII) according
+  to California law. '
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: 1b14a1e4-9a8f-4137-8c61-347fcddffe29
+    type: start
+    task:
+      id: 1b14a1e4-9a8f-4137-8c61-347fcddffe29
+      version: -1
+      name: ""
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "1"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 50
+        }
+      }
+  "1":
+    id: "1"
+    taskid: d79fe3b7-f111-48e8-8fd6-5359a2709c54
+    type: title
+    task:
+      id: d79fe3b7-f111-48e8-8fd6-5359a2709c54
+      version: -1
+      name: Sensitive PII Check
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "3"
+      - "5"
+      - "4"
+      - "6"
+      - "7"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 195
+        }
+      }
+  "3":
+    id: "3"
+    taskid: e0548373-39ab-41d1-813f-43ba604d8138
+    type: regular
+    task:
+      id: e0548373-39ab-41d1-813f-43ba604d8138
+      version: -1
+      name: Does data contain medical information?
+      description: "“Medical information” is defined as information regarding an individual’s
+        medical history, mental or physical condition, or medical treatment or diagnosis
+        by a health care professional.  \n**Source:** http://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1798.82"
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "8"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 340
+        }
+      }
+  "4":
+    id: "4"
+    taskid: 6fad8409-9a04-4b24-8d89-5ab106bd81c0
+    type: regular
+    task:
+      id: 6fad8409-9a04-4b24-8d89-5ab106bd81c0
+      version: -1
+      name: Does data contain financial information?
+      description: "Account number or credit or debit card number, in combination
+        with any required security code, access code, or password that would permit
+        access to an individual’s financial account.  \n**Source:** http://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1798.82"
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "8"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 480,
+          "y": 340
+        }
+      }
+  "5":
+    id: "5"
+    taskid: 4396df47-6847-4346-8c53-c1dd992943e6
+    type: regular
+    task:
+      id: 4396df47-6847-4346-8c53-c1dd992943e6
+      version: -1
+      name: Does data contain health insurance information?
+      description: "“Health insurance information” means an individual’s health insurance
+        policy number or subscriber identification number, any unique identifier used
+        by a health insurer to identify the individual, or any information in an individual’s
+        application and claims history, including any appeals records.  \n**Source:**
+        http://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1798.82"
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "8"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 340
+        }
+      }
+  "6":
+    id: "6"
+    taskid: cd1c5848-5d7f-4e89-8d18-bff40fec9cb4
+    type: regular
+    task:
+      id: cd1c5848-5d7f-4e89-8d18-bff40fec9cb4
+      version: -1
+      name: Does data contain criminal records?
+      description: Any information about criminal cases the data subject has been
+        involved in.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "8"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1340,
+          "y": 340
+        }
+      }
+  "7":
+    id: "7"
+    taskid: 7140907f-e979-49c8-86e9-7b0de27e270b
+    type: regular
+    task:
+      id: 7140907f-e979-49c8-86e9-7b0de27e270b
+      version: -1
+      name: Does data contain children's information?
+      description: Any information pertaining to personal or health details of children.
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "8"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1770,
+          "y": 340
+        }
+      }
+  "8":
+    id: "8"
+    taskid: cffce88e-f442-44c9-8536-43fb2de8ec53
+    type: regular
+    task:
+      id: cffce88e-f442-44c9-8536-43fb2de8ec53
+      version: -1
+      name: Is there any other data that can be considered sensitive PII?
+      description: 'According to CA law, sensitive PII includes but is not limited
+        to the types of information listed out in the tasks above. Discern whether
+        the breached data consists of sensitive PII. '
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "9"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 515
+        }
+      }
+  "9":
+    id: "9"
+    taskid: c30283d1-1553-4c2a-839c-945eb67b37c0
+    type: condition
+    task:
+      id: c30283d1-1553-4c2a-839c-945eb67b37c0
+      version: -1
+      name: Does data contain sensitive PII?
+      description: "If condition is met, increase severity to medium and close the
+        playbook.  \nIf condition is not met, continue the playbook.  "
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#default#':
+      - "19"
+      "Yes":
+      - "12"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 910,
+          "y": 690
+        }
+      }
+  "10":
+    id: "10"
+    taskid: 7a16487b-2dc0-474b-85d6-c66e2e31b19d
+    type: title
+    task:
+      id: 7a16487b-2dc0-474b-85d6-c66e2e31b19d
+      version: -1
+      name: Does data contain basic PII?
+      type: title
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "11"
+      - "14"
+      - "15"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 1040
+        }
+      }
+  "11":
+    id: "11"
+    taskid: 3ae1e237-5992-4c90-8454-6a763cf913d9
+    type: regular
+    task:
+      id: 3ae1e237-5992-4c90-8454-6a763cf913d9
+      version: -1
+      name: Does data contain low-level personal information?
+      description: "A combination of any two of the data pieces below, or any one
+        of the pieces below with other information considered PII, will be considered
+        PII:  \n* First or last name, if common\n* Country, state, or city of residence\n*
+        Age, especially if non-specific\n* Gender or race\n* Name of school or workplace
+        attended\n* Grades, salary, or job position  \n**Source:** Deloitte document"
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "16"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 517,
+          "y": 1185
+        }
+      }
+  "12":
+    id: "12"
+    taskid: 0d9ca564-644b-4255-880d-164b6eedbd28
+    type: regular
+    task:
+      id: 0d9ca564-644b-4255-880d-164b6eedbd28
+      version: -1
+      name: Set the flag IsSensitivePIICompromised - true
+      description: Store the fact that incident has sensitive PII in context.
+      scriptName: Set
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "10"
+    scriptarguments:
+      append: {}
+      key:
+        simple: IsSensitivePIICompromised
+      value:
+        simple: "true"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 695,
+          "y": 865
+        }
+      }
+  "14":
+    id: "14"
+    taskid: d88bc5f7-3d25-4bb7-8dec-5f3752a680eb
+    type: regular
+    task:
+      id: d88bc5f7-3d25-4bb7-8dec-5f3752a680eb
+      version: -1
+      name: Does data contain state ID information?
+      description: "Any of the following data pieces:  \n* Social Security Number\n*
+        Driver's License Number \n* California identification card number  \n**Source:**
+        http://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1798.82 "
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "16"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 942,
+          "y": 1185
+        }
+      }
+  "15":
+    id: "15"
+    taskid: ec57e5d6-0d8d-4cf0-8699-38dc7f2bde9b
+    type: regular
+    task:
+      id: ec57e5d6-0d8d-4cf0-8699-38dc7f2bde9b
+      version: -1
+      name: Does data contain account information?
+      description: "Account number/username in combination with a password or security
+        question and answer that would permit access to an online account.  \n**Source:**
+        http://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1798.82"
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "16"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1755,
+          "y": 1185
+        }
+      }
+  "16":
+    id: "16"
+    taskid: 811e0380-e61a-4bb9-882e-f24dc1acbdd8
+    type: regular
+    task:
+      id: 811e0380-e61a-4bb9-882e-f24dc1acbdd8
+      version: -1
+      name: Does data contain any other PII?
+      description: "Use the below definitions of PII to discern whether breached data
+        has any PII.  \n**PII:** Information that can be used on its own or with other
+        information to identify, contact, or locate a single person, or to identify
+        an individual in context.  \n**US -NIST:** Information which can be used to
+        distinguish or trace an individual's identity, such as their name, social
+        security number, biometric records, etc. alone, or when combined with other
+        personal or identifying information which is linked or linkable to a specific
+        individual, such as date and place of birth, mother’s maiden name, etc.  \n**Source:**
+        The Deloitte document has an appendix table for PII."
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "17"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 1360
+        }
+      }
+  "17":
+    id: "17"
+    taskid: 3013685f-54e8-42cb-8e4a-998a011abf8d
+    type: condition
+    task:
+      id: 3013685f-54e8-42cb-8e4a-998a011abf8d
+      version: -1
+      name: Does data contain basic PII?
+      description: "If yes, set incident severity to medium and close incident.  \nIf
+        no, close incident."
+      type: condition
+      iscommand: false
+      brand: ""
+    nexttasks:
+      "Yes":
+      - "18"
+      "no":
+      - "20"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 1535
+        }
+      }
+  "18":
+    id: "18"
+    taskid: 40bff82f-321d-4180-8176-a02cdf8e1dcd
+    type: regular
+    task:
+      id: 40bff82f-321d-4180-8176-a02cdf8e1dcd
+      version: -1
+      name: Set the flag IsPIICompromised - true
+      description: Store the fact that data set has basic PII in context.
+      scriptName: Set
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      append: {}
+      key:
+        simple: IsPIICompromised
+      value:
+        simple: "true"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 981,
+          "y": 1750
+        }
+      }
+  "19":
+    id: "19"
+    taskid: 45d5df9a-03b4-4aab-8079-3b3d4cef87a3
+    type: regular
+    task:
+      id: 45d5df9a-03b4-4aab-8079-3b3d4cef87a3
+      version: -1
+      name: Set the flag IsSensitivePIICompromised - false
+      description: Store the fact that incident has sensitive PII in context.
+      scriptName: Set
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "10"
+    scriptarguments:
+      append: {}
+      key:
+        simple: IsSensitivePIICompromised
+      value:
+        simple: "false"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1125,
+          "y": 865
+        }
+      }
+  "20":
+    id: "20"
+    taskid: bf1767e2-e07a-4f65-88cd-24ce059db5ba
+    type: regular
+    task:
+      id: bf1767e2-e07a-4f65-88cd-24ce059db5ba
+      version: -1
+      name: Set the flag IsPIICompromised - false
+      description: Store the fact that data set has basic PII in context.
+      scriptName: Set
+      type: regular
+      iscommand: false
+      brand: ""
+    scriptarguments:
+      append: {}
+      key:
+        simple: IsPIICompromised
+      value:
+        simple: "false"
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 1443,
+          "y": 1740
+        }
+      }
+view: |-
+  {
+    "linkLabelsPosition": {},
+    "paper": {
+      "dimensions": {
+        "height": 1795,
+        "width": 2100,
+        "x": 50,
+        "y": 50
+      }
+    }
+  }
+inputs: []
+outputs:
+- contextPath: IsPIICompromised
+  description: Flag to set if there is any PII in compromised data?
+  type: boolean
+- contextPath: IsSensitivePIICompromised
+  description: Flag to set if there is any sensitive PII in compromised data?
+  type: boolean
