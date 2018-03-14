@@ -7,31 +7,31 @@ starttaskid: "0"
 tasks:
   "0":
     id: "0"
-    taskid: 5652fc24-bb4f-42d9-8132-1ab0983f12b2
+    taskid: 28e96809-a1cc-47f1-87e3-4d94fc38edb7
     type: start
     task:
-      id: 5652fc24-bb4f-42d9-8132-1ab0983f12b2
+      id: 28e96809-a1cc-47f1-87e3-4d94fc38edb7
       version: -1
       name: ""
       iscommand: false
       brand: ""
     nexttasks:
       '#none#':
-      - "4"
+      - "10"
     separatecontext: false
     view: |-
       {
         "position": {
           "x": 50,
-          "y": 65
+          "y": 50
         }
       }
   "4":
     id: "4"
-    taskid: e5dc1e98-c3e4-4acb-8974-4067b5e9b137
+    taskid: ae9a5f7d-be1b-43ea-8342-b7c53bd9b5fa
     type: regular
     task:
-      id: e5dc1e98-c3e4-4acb-8974-4067b5e9b137
+      id: ae9a5f7d-be1b-43ea-8342-b7c53bd9b5fa
       version: -1
       name: CreateWordTestFile
       description: Downloads a test file to parse
@@ -43,6 +43,7 @@ tasks:
       '#none#':
       - "6"
     scriptarguments:
+      extend-context: {}
       name:
         simple: test.docx
       text:
@@ -52,15 +53,15 @@ tasks:
       {
         "position": {
           "x": 50,
-          "y": 227
+          "y": 370
         }
       }
   "6":
     id: "6"
-    taskid: 00dec68f-5b6c-44cd-8bc5-b6502b2748f1
+    taskid: 3bd899e1-5cc8-4fe9-8aa6-4b3a1630dc43
     type: regular
     task:
-      id: 00dec68f-5b6c-44cd-8bc5-b6502b2748f1
+      id: 3bd899e1-5cc8-4fe9-8aa6-4b3a1630dc43
       version: -1
       name: RunParseWordDoc
       description: Parses word files to text file
@@ -79,15 +80,15 @@ tasks:
       {
         "position": {
           "x": 50,
-          "y": 400
+          "y": 545
         }
       }
   "7":
     id: "7"
-    taskid: 86be2b34-acf0-4bc6-8d81-2c88dac06509
+    taskid: e80f7ff9-7f64-4587-8dcd-caab127096b4
     type: regular
     task:
-      id: 86be2b34-acf0-4bc6-8d81-2c88dac06509
+      id: e80f7ff9-7f64-4587-8dcd-caab127096b4
       version: -1
       name: ExtractIPsFromFile
       scriptName: ExtractIP
@@ -109,15 +110,15 @@ tasks:
       {
         "position": {
           "x": 50,
-          "y": 750
+          "y": 895
         }
       }
   "8":
     id: "8"
-    taskid: 4ce81084-a5fa-4305-8934-3a1ad156058f
+    taskid: 820ba247-9ba3-4700-8bc4-feb21ad6f1bc
     type: regular
     task:
-      id: 4ce81084-a5fa-4305-8934-3a1ad156058f
+      id: 820ba247-9ba3-4700-8bc4-feb21ad6f1bc
       version: -1
       name: ReadFileContentsToContext
       scriptName: ReadFile
@@ -165,15 +166,15 @@ tasks:
       {
         "position": {
           "x": 50,
-          "y": 575
+          "y": 720
         }
       }
   "9":
     id: "9"
-    taskid: 4a14ebb6-92e0-4adc-856a-a907d134639e
+    taskid: c025933f-7b6d-4601-864c-820764bb0356
     type: regular
     task:
-      id: 4a14ebb6-92e0-4adc-856a-a907d134639e
+      id: c025933f-7b6d-4601-864c-820764bb0356
       version: -1
       name: CheckExtractedIPsExistInContext
       scriptName: VerifyContext
@@ -197,11 +198,39 @@ tasks:
       value2: {}
       value3: {}
       value4: {}
+    separatecontext: false
     view: |-
       {
         "position": {
           "x": 50,
-          "y": 925
+          "y": 1070
+        }
+      }
+  "10":
+    id: "10"
+    taskid: 16745cb5-d6f6-4f52-8013-0a7a56166895
+    type: regular
+    task:
+      id: 16745cb5-d6f6-4f52-8013-0a7a56166895
+      version: -1
+      name: Delete Context
+      scriptName: DeleteContext
+      type: regular
+      iscommand: false
+      brand: ""
+    nexttasks:
+      '#none#':
+      - "4"
+    scriptarguments:
+      all:
+        simple: "yes"
+      key: {}
+    separatecontext: false
+    view: |-
+      {
+        "position": {
+          "x": 50,
+          "y": 195
         }
       }
 view: |-
@@ -209,10 +238,10 @@ view: |-
     "linkLabelsPosition": {},
     "paper": {
       "dimensions": {
-        "height": 955,
+        "height": 1115,
         "width": 380,
         "x": 50,
-        "y": 65
+        "y": 50
       }
     }
   }
