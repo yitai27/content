@@ -578,7 +578,7 @@ def main(argv):
     version = argv[0]
     asset_id = argv[3]
 
-    release_notes = res.join("\n---\n")
+    release_notes = "\n---\n".join(res)
     create_content_descriptor(version, asset_id, release_notes)
 
 
