@@ -562,22 +562,24 @@ def main(argv):
     for file in files:
         create_file_release_notes(file, argv[2])
 
-    res = ""
+    res = []
     missing_release_notes = False
     for key in RELEASE_NOTES_ORDER:
         value = release_note_generator[key]
         ans = value.generate_release_notes()
         if ans is None:
             missing_release_notes = True
-        else:
-            if len(ans) > 0:
-                ans += "\n---\n"
-            res += ans
+        if len(ans) > 0:
+            res.append(ans)
+
     if missing_release_notes:
         sys.exit(1)
+
     version = argv[0]
     asset_id = argv[3]
-    create_content_descriptor(version, asset_id, res)
+
+    release_notes = res.join("\n---\n")
+    create_content_descriptor(version, asset_id, release_notes)
 
 
 if __name__ == "__main__":
