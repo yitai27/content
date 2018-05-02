@@ -45,9 +45,9 @@ class Content:
     __metaclass__ = abc.ABCMeta
 
     def __init__(self):
-        self.modified_store = []
-        self.added_store = []
-        self.deleted_store = []
+        self.modified_store = []  # holds modified file paths
+        self.added_store = []  # holds added file paths
+        self.deleted_store = []  # holds deleted file paths
 
     def add(self, change_type, data):
         if change_type == "M":
@@ -83,58 +83,75 @@ class Content:
         missing_release_notes = False
 
         if len(self.modified_store) + len(self.deleted_store) + len(self.added_store) > 0:
+            print "### Starting generate release notes for %s" % (self.get_header(),)
+
             section_body = ""
+            
+            # Added filed
             if len(self.added_store) > 0:
                 new_str = ""
                 new_count = 0
-                for raw_content in self.added_store:
-                    cnt = self.load_data(raw_content)
-
-                    ans = self.added_release_notes(cnt)
-                    if ans is None:
-                        print_error(cnt["name"] + " is missing releaseNotes entry")
-                        missing_release_notes = True
-
-                    if ans:
-                        new_count += 1
-                    new_str += ans
-
-                if len(new_str) > 0:
-                    if self.show_secondary_header():
-                        if new_count > 1:
-                            section_body += "\n##### " + str(new_count) + " New " + self.get_header() + "\n"
-                        else:
-                            section_body += "\n##### New " + self.get_header() + "\n"
-                    section_body += new_str
+                for path in self.added_store:
+                    with open(path, 'r') as f:
+                        print "Adding release notes (New) for file - [%s]" % (path,)
+                        raw_content = f.read()
+                        cnt = self.load_data(raw_content)
+    
+                        ans = self.added_release_notes(cnt)
+                        if ans is None:
+                            print_error("[%s] is missing releaseNotes entry" % (path,))
+                            missing_release_notes = True
+    
+                        if ans:
+                            new_count += 1
+                        new_str += ans
+    
+                    if len(new_str) > 0:
+                        if self.show_secondary_header():
+                            if new_count > 1:
+                                section_body += "\n##### " + str(new_count) + " New " + self.get_header() + "\n"
+                            else:
+                                section_body += "\n##### New " + self.get_header() + "\n"
+                        section_body += new_str
+            
+            # Modified filed       
             if len(self.modified_store) > 0:
                 modified_str = ""
                 modified_count = 0
-                for raw_content in self.modified_store:
-                    cnt = self.load_data(raw_content)
-                    ans = self.modified_release_notes(cnt)
-                    if ans is None:
-                        print_error(cnt["name"] + " is missing releaseNotes entry")
-                        missing_release_notes = True
-                    elif ans is not "":
-                        modified_str += ans
-                        modified_count += 1
-                if len(modified_str) > 0:
-                    if self.show_secondary_header():
-                        if modified_count > 1:
-                            section_body += "\n##### " + str(modified_count) + " Improved " + self.get_header() + "\n"
-                        else:
-                            section_body += "\n##### Improved " + self.get_header() + "\n"
-                    section_body += modified_str
+                for path in self.modified_store:
+                    with open(path, 'r') as f:
+                        print "Adding release notes (Improved) for file - [%s]" % (path,)
+                        raw_content = f.read()
+                        cnt = self.load_data(raw_content)
+                        ans = self.modified_release_notes(cnt)
+                        if ans is None:
+                            print_error("[%s] is missing releaseNotes entry" % (path,))
+                            missing_release_notes = True
+                        elif ans is not "":
+                            modified_str += ans
+                            modified_count += 1
+                    if len(modified_str) > 0:
+                        if self.show_secondary_header():
+                            if modified_count > 1:
+                                section_body += "\n##### " + str(modified_count) + " Improved " + self.get_header() + "\n"
+                            else:
+                                section_body += "\n##### Improved " + self.get_header() + "\n"
+                        section_body += modified_str
+            
+            # Deleted filed
             if len(self.deleted_store) > 0:
                 section_body += "\n##### Removed " + self.get_header() + "\n"
-                for raw_content in self.deleted_store:
-                    section_body += "- " + raw_content + "\n"
+                for name in self.deleted_store:
+                    print "Adding release notes (Removed) for - [%s]" % (name,)
+                    section_body += "- __" + name + "__\n"
 
             if missing_release_notes:
                 return None
             if len(section_body) > 0:
                 res = "### " + self.get_header() + "\n"
                 res += section_body
+
+            print "### Finished generate release notes for %s" % (self.get_header(),)
 
         return res
 
@@ -472,10 +489,10 @@ def get_deleted_content(full_file_name, data):
         name_index = data.find("-name:", start_index)
         if name_index > 0:
             return data[name_index:].split("\n")[0][len("-name:"):].strip()
-    return ""
+    return full_file_name
 
 
-def handle_deleted_files(delete_file_path, full_file_name):
+def handle_deleted_file(delete_file_path, full_file_name):
     with open(delete_file_path, 'r') as f:
         data = f.read()
         if "/" in full_file_name:
@@ -502,16 +519,14 @@ def create_file_release_notes(file_name, delete_file_path):
             return
 
         if change_type == "D":
-            handle_deleted_files(delete_file_path, full_file_name)
+            handle_deleted_file(delete_file_path, full_file_name)
         elif change_type != "R100" and change_type != "R094":
             if change_type == "R093" or change_type == "R098" or change_type == "R078":
                 # handle the same as modified
                 full_file_name = names[2]
                 change_type = 'M'
 
-            with open(contentLibPath + full_file_name, 'r') as f:
-                data = f.read()
-                file_type_mapping.add(change_type, data)
+            file_type_mapping.add(change_type, contentLibPath + full_file_name)
 
 
 def create_content_descriptor(version, asset_id, res):
