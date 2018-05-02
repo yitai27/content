@@ -414,7 +414,7 @@ class ReputationContent(Content):
         res = ""
 
         if rn != '-':
-            res = cnt["releaseNotes"] + "\n"
+            res = add_dot(cnt["releaseNotes"]) + "\n"
         return res
 
 
@@ -552,19 +552,11 @@ def main(argv):
     for key in RELEASE_NOTES_ORDER:
         value = release_note_generator[key]
         ans = value.generate_release_notes()
-        print "%%%%%%%%%%%%%%%"
-        print "** ans **"
-        print ans
-        print "***"
         if ans is None:
             missing_release_notes = True
         else:
-            if len(res) > 0:
-                res += "\n---\n"
-            print "** res **"
-            print res
-            print "***"
-            print "%%%%%%%%%%%%%%%%"
+            if len(ans) > 0:
+                ans += "\n---\n"
             res += ans
     if missing_release_notes:
         sys.exit(1)
