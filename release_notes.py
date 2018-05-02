@@ -22,7 +22,7 @@ REPORTS_DIR = "Reports"
 DASHBOARDS_DIR = "Dashboards"
 WIDGETS_DIR = "Widgets"
 INCIDENT_FIELDS_DIR = "IncidentFields"
-LAYOUTS_DIR = "LAYOUTS"
+LAYOUTS_DIR = "Layouts"
 CLASSIFIERS_DIR = "Classifiers"
 REPUTATIONS_DIR = "Misc"
 
@@ -38,7 +38,7 @@ def add_dot(text):
 
 
 def release_notes_item(header, body):
-    return '- __' + header + '__\n' + add_dot(body) + '\n'
+    return '- ___' + header + '___\n' + add_dot(body) + '\n'
 
 
 class Content:
