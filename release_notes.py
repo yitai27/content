@@ -455,7 +455,7 @@ releaseNoteGenerator = {
     INCIDENT_FIELDS_DIR: IncidentFieldContent(),
     LAYOUTS_DIR: LayoutContent(),
     CLASSIFIERS_DIR: ClassifierContent(),
-    REPORTS_DIR: ReputationContent()
+    REPUTATIONS_DIR: ReputationContent()
 }
 
 
