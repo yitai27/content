@@ -31,6 +31,16 @@ RELEASE_NOTES_ORDER = [INTEGRATIONS_DIR, SCRIPTS_DIR, PLAYBOOKS_DIR, REPORTS_DIR
                        CLASSIFIERS_DIR, REPUTATIONS_DIR]
 
 
+def add_dot(text):
+    if text.endswith('.'):
+        return text
+    return text + '.'
+
+
+def release_notes_item(header, body):
+    return '__' + header + '__\n' + add_dot(body) + '\n'
+
+
 class Content:
     __metaclass__ = abc.ABCMeta
 
@@ -65,7 +75,7 @@ class Content:
     def load_data(self, data):
         return
     
-    def show_improved_header(self):
+    def show_secondary_header(self):
         return True
 
     def generate_release_notes(self):
@@ -90,10 +100,11 @@ class Content:
                     new_str += ans
 
                 if len(new_str) > 0:
-                    if new_count > 1:
-                        section_body += "\n#### " + str(new_count) + " New " + self.get_header() + "\n"
-                    else:
-                        section_body += "\n#### New " + self.get_header() + "\n"
+                    if self.show_secondary_header():
+                        if new_count > 1:
+                            section_body += "\n#### " + str(new_count) + " New " + self.get_header() + "\n"
+                        else:
+                            section_body += "\n#### New " + self.get_header() + "\n"
                     section_body += new_str
             if len(self.modified_store) > 0:
                 modified_str = ""
@@ -107,11 +118,12 @@ class Content:
                     elif ans is not "":
                         modified_str += ans
                         modified_count += 1
-                if len(modified_str) > 0 and self.show_improved_header():
-                    if modified_count > 1:
-                        section_body += "\n#### " + str(modified_count) + " Improved " + self.get_header() + "\n"
-                    else:
-                        section_body += "\n#### Improved " + self.get_header() + "\n"
+                if len(modified_str) > 0:
+                    if self.show_secondary_header():
+                        if modified_count > 1:
+                            section_body += "\n#### " + str(modified_count) + " Improved " + self.get_header() + "\n"
+                        else:
+                            section_body += "\n#### Improved " + self.get_header() + "\n"
                     section_body += modified_str
             if len(self.deleted_store) > 0:
                 section_body += "\n#### Removed " + self.get_header() + "\n"
@@ -139,10 +151,7 @@ class ScriptContent(Content):
         rn = cnt.get("releaseNotes", "")
         if len(rn) > 0 and rn == "-":
             return ""
-        res =  "- " + cnt["name"] + "\n"
-        if cnt.get("comment") is not None and len(cnt.get("comment")) > 0:
-            res += "-- " + cnt["comment"] + "\n"
-        return res
+        return release_notes_item(cnt["name"], cnt["comment"])
 
     def modified_release_notes(self,cnt):
         rn = cnt.get("releaseNotes", "")
@@ -151,8 +160,7 @@ class ScriptContent(Content):
         res = ""
 
         if rn != '-':
-            res =  "- " + cnt["name"] + "\n"
-            res += "-- " + cnt["releaseNotes"] + "\n"
+            res = release_notes_item(cnt["name"], rn)
         return res
 
 
@@ -170,10 +178,8 @@ class PlaybookContent(Content):
         rn = cnt.get("releaseNotes", "")
         if len(rn) > 0 and rn == "-":
             return ""
-        res = "- " + cnt["name"] + "\n"
-        if cnt.get("description") is not None and len(cnt.get("description")) > 0:
-            res += "-- " + cnt["description"] + "\n"
-        return res
+        
+        return release_notes_item(cnt["name"], cnt["description"])
 
     def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
@@ -182,8 +188,7 @@ class PlaybookContent(Content):
         res = ""
 
         if rn != '-':
-            res =  "- " + cnt["name"] + "\n"
-            res += "-- " + cnt["releaseNotes"] + "\n"
+            res = release_notes_item(cnt["name"], rn)
         return res
 
 
@@ -201,10 +206,7 @@ class ReportContent(Content):
         rn = cnt.get("releaseNotes", "")
         if len(rn) > 0 and rn == "-":
             return ""
-        res = "- " + cnt["name"] + "\n"
-        if cnt.get("description") is not None and len(cnt.get("description")) > 0:
-            res += "-- " + cnt["description"] + "\n"
-        return res
+        return release_notes_item(cnt["name"], cnt["description"])
 
     def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
@@ -213,8 +215,7 @@ class ReportContent(Content):
         res = ""
 
         if rn != '-':
-            res =  "- " + cnt["name"] + "\n"
-            res += "-- " + cnt["releaseNotes"] + "\n"
+            res = release_notes_item(cnt["name"], rn)
         return res
 
 
@@ -232,10 +233,8 @@ class DashboardContent(Content):
         rn = cnt.get("releaseNotes", "")
         if len(rn) > 0 and rn == "-":
             return ""
-        res = "- " + cnt["name"] + "\n"
-        if cnt.get("description") is not None and len(cnt.get("description")) > 0:
-            res += "-- " + cnt["description"] + "\n"
-        return res
+        
+        return release_notes_item(cnt["name"], cnt["description"])
 
     def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
@@ -244,8 +243,7 @@ class DashboardContent(Content):
         res = ""
 
         if rn != '-':
-            res =  "- " + cnt["name"] + "\n"
-            res += "-- " + rn + "\n"
+            res = release_notes_item(cnt["name"], rn)
         return res
 
 
@@ -263,10 +261,8 @@ class WidgetContent(Content):
         rn = cnt.get("releaseNotes", "")
         if len(rn) > 0 and rn == "-":
             return ""
-        res = "- " + cnt["name"] + "\n"
-        if cnt.get("description") is not None and len(cnt.get("description")) > 0:
-            res += "-- " + cnt["description"] + "\n"
-        return res
+        
+        return release_notes_item(cnt["name"], cnt["description"])
 
     def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
@@ -275,8 +271,7 @@ class WidgetContent(Content):
         res = ""
 
         if rn != '-':
-            res =  "- " + cnt["name"] + "\n"
-            res += "-- " + rn + "\n"
+            res = release_notes_item(cnt["name"], rn)
         return res
 
 
@@ -294,13 +289,10 @@ class IncidentFieldContent(Content):
         rn = cnt.get("releaseNotes", "")
         if len(rn) == 0:
             return None
-        res = ""
 
-        if rn != '-':
-            res += "- " + cnt["releaseNotes"] + "\n"
-        return res
+        return add_dot(rn) + "\n"
 
-    def show_improved_header(self):
+    def show_secondary_header(self):
         return False
 
     def modified_release_notes(self, cnt):
@@ -310,7 +302,7 @@ class IncidentFieldContent(Content):
         res = ""
 
         if rn != '-':
-            res += "- " + cnt["releaseNotes"] + "\n"
+            res = add_dot(rn) + "\n"
         return res
 
 
@@ -338,7 +330,7 @@ class LayoutContent(Content):
             print_error("invalid layout kind %s" % (layout_type,))
             return None
 
-        return "- " + layout_type + " - " + layout_kind + "\n" + "-- " + rn + "\n"
+        return release_notes_item(layout_type + " - " + layout_kind, rn)
 
     def added_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
@@ -377,7 +369,7 @@ class ClassifierContent(Content):
             print_error("invalid classifier brand name %s" % (brand_name,))
             return None
 
-        return "- " + brand_name + "\n" + "-- " + rn + "\n"
+        return release_notes_item(brand_name, rn)
 
     def added_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
@@ -412,7 +404,7 @@ class ReputationContent(Content):
         # This should never happen
         return ""
 
-    def show_improved_header(self):
+    def show_secondary_header(self):
         return False
 
     def modified_release_notes(self, cnt):
@@ -422,7 +414,7 @@ class ReputationContent(Content):
         res = ""
 
         if rn != '-':
-            res += "- " + cnt["releaseNotes"] + "\n"
+            res = cnt["releaseNotes"] + "\n"
         return res
 
 
@@ -437,10 +429,7 @@ class IntegrationContent(Content):
         return "Integrations"
 
     def added_release_notes(self, cnt):
-        res = "- " + cnt["name"] + "\n"
-        if cnt.get("description") is not None and len(cnt.get("description")) > 0:
-            res += "-- " + cnt["description"] + "\n"
-        return res
+        return release_notes_item(cnt["name"], cnt["description"])
 
     def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
@@ -449,8 +438,7 @@ class IntegrationContent(Content):
         res = ""
 
         if rn != '-':
-            res =  "- " + cnt["name"] + "\n"
-            res += "-- " + cnt["releaseNotes"] + "\n"
+            res = release_notes_item(cnt["name"], cnt["releaseNotes"])
         return res
 
 
@@ -563,12 +551,12 @@ def main(argv):
     missing_release_notes = False
     for key in RELEASE_NOTES_ORDER:
         value = release_note_generator[key]
-        if len(res) > 0:
-            res += "\n\n"
         ans = value.generate_release_notes()
         if ans is None:
             missing_release_notes = True
         else:
+            if len(res) > 0:
+                res += "\n---\n"
             res += ans
     if missing_release_notes:
         sys.exit(1)
