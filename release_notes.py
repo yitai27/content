@@ -15,6 +15,20 @@ LAYOUT_TYPE_TO_NAME = {
     "close": "Close",
 }
 
+INTEGRATIONS_DIR = "Integrations"
+SCRIPTS_DIR = "Scripts"
+PLAYBOOKS_DIR = "Playbooks"
+REPORTS_DIR = "Reports"
+DASHBOARDS_DIR = "Dashboards"
+WIDGETS_DIR = "Widgets"
+INCIDENT_FIELDS_DIR = "IncidentFields"
+LAYOUTS_DIR = "LAYOUTS"
+CLASSIFIERS_DIR = "Classifiers"
+REPUTATIONS_DIR = "Misc"
+
+RELEASE_NOTES_ORDER = [INTEGRATIONS_DIR, SCRIPTS_DIR, PLAYBOOKS_DIR, REPORTS_DIR,
+                       DASHBOARDS_DIR, WIDGETS_DIR, INCIDENT_FIELDS_DIR, LAYOUTS_DIR,
+                       CLASSIFIERS_DIR, REPUTATIONS_DIR]
 
 class Content:
     __metaclass__ = abc.ABCMeta
@@ -432,16 +446,16 @@ Content.register(IntegrationContent)
 
 
 releaseNoteGenerator = {
-    "Integrations": IntegrationContent(),
-    "Scripts": ScriptContent(),
-    "Playbooks": PlaybookContent(),
-    "Reports": ReportContent(),
-    "Dashboards": DashboardContent(),
-    "Widgets": WidgetContent(),
-    "IncidentFields": IncidentFieldContent(),
-    "Layouts": LayoutContent(),
-    "Classifiers": ClassifierContent(),
-    "Misc": ReputationContent()
+    INTEGRATIONS_DIR: IntegrationContent(),
+    SCRIPTS_DIR: ScriptContent(),
+    PLAYBOOKS_DIR: PlaybookContent(),
+    REPORTS_DIR: ReportContent(),
+    DASHBOARDS_DIR: DashboardContent(),
+    WIDGETS_DIR: WidgetContent(),
+    INCIDENT_FIELDS_DIR: IncidentFieldContent(),
+    LAYOUTS_DIR: LayoutContent(),
+    CLASSIFIERS_DIR: ClassifierContent(),
+    REPORTS_DIR: ReputationContent()
 }
 
 
@@ -534,7 +548,8 @@ def main(argv):
 
     res = ""
     missingReleaseNotes = False
-    for key, value in releaseNoteGenerator.iteritems():
+    for key in RELEASE_NOTES_ORDER:
+        value = releaseNoteGenerator[key]
         if len(res) > 0:
             res += "\n\n"
         ans = value.generateRN()

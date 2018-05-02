@@ -1,7 +1,8 @@
 commonfields:
   id: ActiveUsersD2
   version: -1
-name: ActiveUsersD2
+name: ActiveUsersD22
+releaseNotes: "ActiveUsersD22 release notes bla bla bla"
 script: |-
   resp = executeCommand("D2ActiveUsers", {});
   if (isError(resp[0])) {

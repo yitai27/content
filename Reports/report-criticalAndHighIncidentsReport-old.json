@@ -1,5 +1,6 @@
 {
   "id": "criticalAndHighIncidentsReport",
+  "releaseNotes": "criticalAndHighIncidentsReport release notes",
   "name": "Critical and High incidents",
   "description": "All critical and high severity incidents that may need the analyst attention.",
   "fromVersion": "2.5.0",

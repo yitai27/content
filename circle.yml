@@ -6,9 +6,19 @@ test:
     # install dependencies
     - npm install npm -g
     - pip install git+https://github.com/demisto/demisto-py.git@test-content
+    - pip install pykwalify
+    - npm install -g jsdoc-to-markdown
+    - pip install git+https://github.com/rahulrrixe/parinx.git@master
+
+    # validate yaml
+    - chmod +x ./Tests/yamlvalidator
+    - ./Tests/yamlvalidator
 
     # build content descriptor
     - ./setContentDescriptor.sh $CIRCLE_BUILD_NUM c201ca27379c78f0bc562bbfdd00d33daf0f74a3 18.5.0
+
+    # create common server documentation
+    - ./Docs/commonServerDocs.sh
 
     # create content bundle
     - python content_creator.py $CIRCLE_ARTIFACTS

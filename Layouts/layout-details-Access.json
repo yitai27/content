@@ -1,5 +1,6 @@
 {
 	"typeId": "Access",
+	"releaseNotes": "Access details releas enotes",
 	"kind": "details",
 	"layout": {
 		"id": "Access",

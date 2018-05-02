@@ -1,5 +1,6 @@
 {
   "id": "active-incidents-by-type",
+  "releaseNotes": "Active inc release notes",
   "version": -1,
   "fromVersion": "3.5.0",
   "name": "Active Incidents by Type",
