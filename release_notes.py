@@ -30,6 +30,7 @@ RELEASE_NOTES_ORDER = [INTEGRATIONS_DIR, SCRIPTS_DIR, PLAYBOOKS_DIR, REPORTS_DIR
                        DASHBOARDS_DIR, WIDGETS_DIR, INCIDENT_FIELDS_DIR, LAYOUTS_DIR,
                        CLASSIFIERS_DIR, REPUTATIONS_DIR]
 
+
 class Content:
     __metaclass__ = abc.ABCMeta
 
@@ -299,6 +300,9 @@ class IncidentFieldContent(Content):
             res += "- " + cnt["releaseNotes"] + "\n"
         return res
 
+    def show_improved_header(self):
+        return False
+
     def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) == 0:
@@ -407,6 +411,9 @@ class ReputationContent(Content):
     def added_release_notes(self, cnt):
         # This should never happen
         return ""
+
+    def show_improved_header(self):
+        return False
 
     def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
