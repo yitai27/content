@@ -34,90 +34,93 @@ class Content:
     __metaclass__ = abc.ABCMeta
 
     def __init__(self):
-        self.modifiedStore = []
-        self.addedStore = []
-        self.deletedStore = []
+        self.modified_store = []
+        self.added_store = []
+        self.deleted_store = []
 
-    def add(self, changeType, data):
-        if changeType == "M":
-            self.modifiedStore.append(data)
-        elif changeType == "A":
-            self.addedStore.append(data)
-        elif changeType == "D":
-            self.deletedStore.append(data)
+    def add(self, change_type, data):
+        if change_type == "M":
+            self.modified_store.append(data)
+        elif change_type == "A":
+            self.added_store.append(data)
+        elif change_type == "D":
+            self.deleted_store.append(data)
         else:
-            print "Unknown change type " + changeType
+            print "Unknown change type " + change_type
 
     @abc.abstractmethod
-    def getHeader(self):
+    def get_header(self):
         return
 
     @abc.abstractmethod
-    def addedReleaseNotes(self, data):
+    def added_release_notes(self, data):
         return
 
     @abc.abstractmethod
-    def modifiedReleaseNotes(self, data):
+    def modified_release_notes(self, data):
         return
 
     @abc.abstractmethod
-    def loadData(self, data):
+    def load_data(self, data):
         return
+    
+    def show_improved_header(self):
+        return True
 
-    def generateRN(self):
+    def generate_release_notes(self):
         res = ""
-        missingReleaseNotes = False
+        missing_release_notes = False
 
-        if len(self.modifiedStore) + len(self.deletedStore) + len(self.addedStore) > 0:
+        if len(self.modified_store) + len(self.deleted_store) + len(self.added_store) > 0:
             section_body = ""
-            if len(self.addedStore) > 0:
-                newStr = ""
+            if len(self.added_store) > 0:
+                new_str = ""
                 new_count = 0
-                for rawContent in self.addedStore:
-                    cnt = self.loadData(rawContent)
+                for raw_content in self.added_store:
+                    cnt = self.load_data(raw_content)
 
-                    ans = self.addedReleaseNotes(cnt)
+                    ans = self.added_release_notes(cnt)
                     if ans is None:
                         print_error(cnt["name"] + " is missing releaseNotes entry")
-                        missingReleaseNotes = True
+                        missing_release_notes = True
 
                     if ans:
                         new_count += 1
-                    newStr += ans
+                    new_str += ans
 
-                if len(newStr) > 0:
+                if len(new_str) > 0:
                     if new_count > 1:
-                        section_body += "\n#### " + str(new_count) + " New " + self.getHeader() + "\n"
+                        section_body += "\n#### " + str(new_count) + " New " + self.get_header() + "\n"
                     else:
-                        section_body += "\n#### New " + self.getHeader() + "\n"
-                    section_body += newStr
-            if len(self.modifiedStore) > 0:
-                modifiedStr = ""
+                        section_body += "\n#### New " + self.get_header() + "\n"
+                    section_body += new_str
+            if len(self.modified_store) > 0:
+                modified_str = ""
                 modified_count = 0
-                for rawContent in self.modifiedStore:
-                    cnt = self.loadData(rawContent)
-                    ans = self.modifiedReleaseNotes(cnt)
+                for raw_content in self.modified_store:
+                    cnt = self.load_data(raw_content)
+                    ans = self.modified_release_notes(cnt)
                     if ans is None:
                         print_error(cnt["name"] + " is missing releaseNotes entry")
-                        missingReleaseNotes = True
+                        missing_release_notes = True
                     elif ans is not "":
-                        modifiedStr += ans
+                        modified_str += ans
                         modified_count += 1
-                if len(modifiedStr) > 0:
+                if len(modified_str) > 0 and self.show_improved_header():
                     if modified_count > 1:
-                        section_body += "\n#### " + str(modified_count) + " Improved " + self.getHeader() + "\n"
+                        section_body += "\n#### " + str(modified_count) + " Improved " + self.get_header() + "\n"
                     else:
-                        section_body += "\n#### Improved " + self.getHeader() + "\n"
-                    section_body += modifiedStr
-            if len(self.deletedStore) > 0:
-                section_body += "\n#### Removed " + self.getHeader() + "\n"
-                for rawContent in self.deletedStore:
-                    section_body += "- " + rawContent + "\n"
+                        section_body += "\n#### Improved " + self.get_header() + "\n"
+                    section_body += modified_str
+            if len(self.deleted_store) > 0:
+                section_body += "\n#### Removed " + self.get_header() + "\n"
+                for raw_content in self.deleted_store:
+                    section_body += "- " + raw_content + "\n"
 
-            if missingReleaseNotes:
+            if missing_release_notes:
                 return None
             if len(section_body) > 0:
-                res = "### " + self.getHeader() + "\n"
+                res = "### " + self.get_header() + "\n"
                 res += section_body
 
         return res
@@ -125,13 +128,13 @@ class Content:
 
 class ScriptContent(Content):
 
-    def loadData(self, data):
+    def load_data(self, data):
         return yaml.safe_load(data)
 
-    def getHeader(self):
+    def get_header(self):
         return "Scripts"
 
-    def addedReleaseNotes(self, cnt):
+    def added_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) > 0 and rn == "-":
             return ""
@@ -140,12 +143,12 @@ class ScriptContent(Content):
             res += "-- " + cnt["comment"] + "\n"
         return res
 
-    def modifiedReleaseNotes(self,cnt):
+    def modified_release_notes(self,cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) == 0:
             return None
         res = ""
-        #Add a comment only if there are release notes
+
         if rn != '-':
             res =  "- " + cnt["name"] + "\n"
             res += "-- " + cnt["releaseNotes"] + "\n"
@@ -156,13 +159,13 @@ Content.register(ScriptContent)
 
 
 class PlaybookContent(Content):
-    def loadData(self, data):
+    def load_data(self, data):
         return yaml.safe_load(data)
 
-    def getHeader(self):
+    def get_header(self):
         return "Playbooks"
 
-    def addedReleaseNotes(self, cnt):
+    def added_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) > 0 and rn == "-":
             return ""
@@ -171,12 +174,12 @@ class PlaybookContent(Content):
             res += "-- " + cnt["description"] + "\n"
         return res
 
-    def modifiedReleaseNotes(self, cnt):
+    def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) == 0:
             return None
         res = ""
-        #Add a comment only if there are release notes
+
         if rn != '-':
             res =  "- " + cnt["name"] + "\n"
             res += "-- " + cnt["releaseNotes"] + "\n"
@@ -187,13 +190,13 @@ Content.register(PlaybookContent)
 
 
 class ReportContent(Content):
-    def loadData(self, data):
+    def load_data(self, data):
         return json.loads(data)
 
-    def getHeader(self):
+    def get_header(self):
         return "Reports"
 
-    def addedReleaseNotes(self, cnt):
+    def added_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) > 0 and rn == "-":
             return ""
@@ -202,12 +205,12 @@ class ReportContent(Content):
             res += "-- " + cnt["description"] + "\n"
         return res
 
-    def modifiedReleaseNotes(self, cnt):
+    def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) == 0:
             return None
         res = ""
-        #Add a comment only if there are release notes
+
         if rn != '-':
             res =  "- " + cnt["name"] + "\n"
             res += "-- " + cnt["releaseNotes"] + "\n"
@@ -218,13 +221,13 @@ Content.register(ReportContent)
 
 
 class DashboardContent(Content):
-    def loadData(self, data):
+    def load_data(self, data):
         return json.loads(data)
 
-    def getHeader(self):
+    def get_header(self):
         return "Dashboards"
 
-    def addedReleaseNotes(self, cnt):
+    def added_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) > 0 and rn == "-":
             return ""
@@ -233,12 +236,12 @@ class DashboardContent(Content):
             res += "-- " + cnt["description"] + "\n"
         return res
 
-    def modifiedReleaseNotes(self, cnt):
+    def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) == 0:
             return None
         res = ""
-        #Add a comment only if there are release notes
+
         if rn != '-':
             res =  "- " + cnt["name"] + "\n"
             res += "-- " + rn + "\n"
@@ -249,13 +252,13 @@ Content.register(DashboardContent)
 
 
 class WidgetContent(Content):
-    def loadData(self, data):
+    def load_data(self, data):
         return json.loads(data)
 
-    def getHeader(self):
+    def get_header(self):
         return "Widgets"
 
-    def addedReleaseNotes(self, cnt):
+    def added_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) > 0 and rn == "-":
             return ""
@@ -264,12 +267,12 @@ class WidgetContent(Content):
             res += "-- " + cnt["description"] + "\n"
         return res
 
-    def modifiedReleaseNotes(self, cnt):
+    def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) == 0:
             return None
         res = ""
-        #Add a comment only if there are release notes
+
         if rn != '-':
             res =  "- " + cnt["name"] + "\n"
             res += "-- " + rn + "\n"
@@ -280,13 +283,13 @@ Content.register(WidgetContent)
 
 
 class IncidentFieldContent(Content):
-    def loadData(self, data):
+    def load_data(self, data):
         return json.loads(data)
 
-    def getHeader(self):
+    def get_header(self):
         return "Incident Fields"
 
-    def addedReleaseNotes(self, cnt):
+    def added_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) == 0:
             return None
@@ -296,7 +299,7 @@ class IncidentFieldContent(Content):
             res += "- " + cnt["releaseNotes"] + "\n"
         return res
 
-    def modifiedReleaseNotes(self, cnt):
+    def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) == 0:
             return None
@@ -311,13 +314,14 @@ Content.register(IncidentFieldContent)
 
 
 class LayoutContent(Content):
-    def loadData(self, data):
+    def load_data(self, data):
         return json.loads(data)
 
-    def getHeader(self):
+    def get_header(self):
         return "Incident Layouts"
 
-    def getReleaseNotes(self, cnt):
+    @staticmethod
+    def get_release_notes(cnt):
         rn = cnt.get("releaseNotes", "")
 
         layout_kind = LAYOUT_TYPE_TO_NAME.get(cnt.get("kind", ""))
@@ -332,14 +336,14 @@ class LayoutContent(Content):
 
         return "- " + layout_type + " - " + layout_kind + "\n" + "-- " + rn + "\n"
 
-    def addedReleaseNotes(self, cnt):
+    def added_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) == 0:
             return None
 
-        return self.getReleaseNotes(cnt)
+        return LayoutContent.get_release_notes(cnt)
 
-    def modifiedReleaseNotes(self, cnt):
+    def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
 
         if len(rn) == 0:
@@ -348,20 +352,21 @@ class LayoutContent(Content):
         if rn == "-":
             return ""
 
-        return self.getReleaseNotes(cnt)
+        return LayoutContent.get_release_notes(cnt)
 
 
 Content.register(LayoutContent)
 
 
 class ClassifierContent(Content):
-    def loadData(self, data):
+    def load_data(self, data):
         return json.loads(data)
 
-    def getHeader(self):
+    def get_header(self):
         return "Classification & Mapping"
 
-    def getReleaseNotes(self, cnt):
+    @staticmethod
+    def get_release_notes(cnt):
         rn = cnt.get("releaseNotes", "")
         brand_name = cnt.get("brandName")
         if not brand_name:
@@ -370,14 +375,14 @@ class ClassifierContent(Content):
 
         return "- " + brand_name + "\n" + "-- " + rn + "\n"
 
-    def addedReleaseNotes(self, cnt):
+    def added_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) == 0:
             return None
 
-        return self.getReleaseNotes(cnt)
+        return ClassifierContent.get_release_notes(cnt)
 
-    def modifiedReleaseNotes(self, cnt):
+    def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
 
         if len(rn) == 0:
@@ -386,29 +391,29 @@ class ClassifierContent(Content):
         if rn == "-":
             return ""
 
-        return self.getReleaseNotes(cnt)
+        return ClassifierContent.get_release_notes(cnt)
 
 
 Content.register(ClassifierContent)
 
 
 class ReputationContent(Content):
-    def loadData(self, data):
+    def load_data(self, data):
         return json.loads(data)
 
-    def getHeader(self):
+    def get_header(self):
         return "Reputations"
 
-    def addedReleaseNotes(self, cnt):
-        #This should never happen
+    def added_release_notes(self, cnt):
+        # This should never happen
         return ""
 
-    def modifiedReleaseNotes(self, cnt):
+    def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) == 0:
             return None
         res = ""
-        #Add a comment only if there are release notes
+
         if rn != '-':
             res += "- " + cnt["releaseNotes"] + "\n"
         return res
@@ -418,24 +423,24 @@ Content.register(ReputationContent)
 
 
 class IntegrationContent(Content):
-    def loadData(self, data):
+    def load_data(self, data):
         return yaml.safe_load(data)
 
-    def getHeader(self):
+    def get_header(self):
         return "Integrations"
 
-    def addedReleaseNotes(self, cnt):
-        res =  "- " + cnt["name"] + "\n"
+    def added_release_notes(self, cnt):
+        res = "- " + cnt["name"] + "\n"
         if cnt.get("description") is not None and len(cnt.get("description")) > 0:
             res += "-- " + cnt["description"] + "\n"
         return res
 
-    def modifiedReleaseNotes(self, cnt):
+    def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) == 0:
             return None
         res = ""
-        #Add a comment only if there are release notes
+
         if rn != '-':
             res =  "- " + cnt["name"] + "\n"
             res += "-- " + cnt["releaseNotes"] + "\n"
@@ -445,7 +450,7 @@ class IntegrationContent(Content):
 Content.register(IntegrationContent)
 
 
-releaseNoteGenerator = {
+release_note_generator = {
     INTEGRATIONS_DIR: IntegrationContent(),
     SCRIPTS_DIR: ScriptContent(),
     PLAYBOOKS_DIR: PlaybookContent(),
@@ -459,69 +464,69 @@ releaseNoteGenerator = {
 }
 
 
-def parseChangeList(filePath):
-    with open(filePath, 'r') as f:
+def parse_change_list(file_path):
+    with open(file_path, 'r') as f:
         data = f.read()
         return data.split("\n")
     return []
 
 
-def getDeletedContent(fullFileName, data):
-    startIndex = data.find(fullFileName)
-    if startIndex > 0:
-        nameIndex = data.find("-name:", startIndex)
-        if nameIndex > 0:
-            return data[nameIndex:].split("\n")[0][len("-name:"):].strip()
+def get_deleted_content(full_file_name, data):
+    start_index = data.find(full_file_name)
+    if start_index > 0:
+        name_index = data.find("-name:", start_index)
+        if name_index > 0:
+            return data[name_index:].split("\n")[0][len("-name:"):].strip()
     return ""
 
 
-def handleDeletedFiles(deleteFilePath, fullFileName):
-    with open(deleteFilePath, 'r') as f:
+def handle_deleted_files(delete_file_path, full_file_name):
+    with open(delete_file_path, 'r') as f:
         data = f.read()
-        if "/" in fullFileName:
-            fileType = fullFileName.split("/")[0]
-            fileTypeMapping = releaseNoteGenerator.get(fileType)
-            deletedContent = getDeletedContent(fullFileName, data)
-            if fileTypeMapping is not None:
-                fileTypeMapping.add("D", deletedContent)
+        if "/" in full_file_name:
+            file_type = full_file_name.split("/")[0]
+            file_type_mapping = release_note_generator.get(file_type)
+            deleted_content = get_deleted_content(full_file_name, data)
+            if file_type_mapping is not None:
+                file_type_mapping.add("D", deleted_content)
 
 
-def createFileReleaseNotes(fileName, deleteFilePath):
-    if len(fileName) > 0:
-        names = fileName.split("\t")
-        changeType = names[0]
-        fullFileName = names[1]
+def create_file_release_notes(file_name, delete_file_path):
+    if len(file_name) > 0:
+        names = file_name.split("\t")
+        change_type = names[0]
+        full_file_name = names[1]
 
-        if not "/" in fullFileName:
+        if not "/" in full_file_name:
             return
 
-        fileType = fullFileName.split("/")[0]
-        fileTypeMapping = releaseNoteGenerator.get(fileType)
-        if fileTypeMapping is None:
-            print "Unsupported file type " + fileType
+        file_type = full_file_name.split("/")[0]
+        file_type_mapping = release_note_generator.get(file_type)
+        if file_type_mapping is None:
+            print "Unsupported file type " + file_type
             return
 
-        if changeType == "D":
-            handleDeletedFiles(deleteFilePath, fullFileName)
-        elif changeType != "R100" and changeType != "R094":
-            if changeType == "R093" or changeType == "R098" or changeType == "R078":
+        if change_type == "D":
+            handle_deleted_files(delete_file_path, full_file_name)
+        elif change_type != "R100" and change_type != "R094":
+            if change_type == "R093" or change_type == "R098" or change_type == "R078":
                 # handle the same as modified
-                fullFileName = names[2]
-                changeType = 'M'
+                full_file_name = names[2]
+                change_type = 'M'
 
-            with open(contentLibPath + fullFileName, 'r') as f:
+            with open(contentLibPath + full_file_name, 'r') as f:
                 data = f.read()
-                fileTypeMapping.add(changeType, data)
+                file_type_mapping.add(change_type, data)
 
 
-def createContentDescriptor(version, assetId, res):
-    #time format example 2017 - 06 - 11T15:25:57.0 + 00:00
+def create_content_descriptor(version, asset_id, res):
+    # time format example 2017 - 06 - 11T15:25:57.0 + 00:00
     date = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.0+00:00")
-    release_notes = "## Demisto Content Release Notes for version " + version + " (" + assetId + ")\n"
+    release_notes = "## Demisto Content Release Notes for version " + version + " (" + asset_id + ")\n"
     release_notes += "##### Published on %s\n%s" % (datetime.datetime.now().strftime("%d %B %Y"), res)
-    contentDescriptor = {
+    content_descriptor = {
         "installDate": "0001-01-01T00:00:00Z",
-        "assetId": int(assetId),
+        "assetId": int(asset_id),
         "releaseNotes": release_notes,
         "modified": date,
         "ignoreGit": False,
@@ -531,7 +536,7 @@ def createContentDescriptor(version, assetId, res):
         "id": ""
     }
     with open('content-descriptor.json', 'w') as outfile:
-        json.dump(contentDescriptor, outfile)
+        json.dump(content_descriptor, outfile)
 
     with open('release-notes.txt', 'w') as outfile:
         outfile.write(release_notes)
@@ -539,30 +544,31 @@ def createContentDescriptor(version, assetId, res):
 
 def main(argv):
     if len(argv) < 4:
-        print "<Release version>, <File with the full list of changes>, <Complete diff file for deleted files>, <assetID>"
+        print "<Release version>, <File with the full list of changes>, " \
+              "<Complete diff file for deleted files>, <assetID>"
         sys.exit(1)
-    files = parseChangeList(argv[1])
+    files = parse_change_list(argv[1])
 
     for file in files:
-        createFileReleaseNotes(file, argv[2])
+        create_file_release_notes(file, argv[2])
 
     res = ""
-    missingReleaseNotes = False
+    missing_release_notes = False
     for key in RELEASE_NOTES_ORDER:
-        value = releaseNoteGenerator[key]
+        value = release_note_generator[key]
         if len(res) > 0:
             res += "\n\n"
-        ans = value.generateRN()
+        ans = value.generate_release_notes()
         if ans is None:
-            missingReleaseNotes = True
+            missing_release_notes = True
         else:
             res += ans
-    if missingReleaseNotes == True:
+    if missing_release_notes:
         sys.exit(1)
     version = argv[0]
-    assetId = argv[3]
-    createContentDescriptor(version, assetId, res)
+    asset_id = argv[3]
+    create_content_descriptor(version, asset_id, res)
 
 
 if __name__ == "__main__":
-   main(sys.argv[1:])
+    main(sys.argv[1:])
