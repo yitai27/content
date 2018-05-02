@@ -83,7 +83,7 @@ class Content:
         missing_release_notes = False
 
         if len(self.modified_store) + len(self.deleted_store) + len(self.added_store) > 0:
-            print "### Starting generate release notes for %s" % (self.get_header(),)
+            print "Starting generate release notes for %s" % (self.get_header(),)
 
             section_body = ""
             
@@ -93,7 +93,7 @@ class Content:
                 new_count = 0
                 for path in self.added_store:
                     with open(path, 'r') as f:
-                        print "Adding release notes (New) for file - [%s]" % (path,)
+                        print "     - Adding release notes (New) for file - [%s]" % (path,)
                         raw_content = f.read()
                         cnt = self.load_data(raw_content)
     
@@ -106,13 +106,13 @@ class Content:
                             new_count += 1
                         new_str += ans
     
-                    if len(new_str) > 0:
-                        if self.show_secondary_header():
-                            if new_count > 1:
-                                section_body += "\n##### " + str(new_count) + " New " + self.get_header() + "\n"
-                            else:
-                                section_body += "\n##### New " + self.get_header() + "\n"
-                        section_body += new_str
+                if len(new_str) > 0:
+                    if self.show_secondary_header():
+                        if new_count > 1:
+                            section_body += "\n##### " + str(new_count) + " New " + self.get_header() + "\n"
+                        else:
+                            section_body += "\n##### New " + self.get_header() + "\n"
+                    section_body += new_str
             
             # Modified filed       
             if len(self.modified_store) > 0:
@@ -120,7 +120,7 @@ class Content:
                 modified_count = 0
                 for path in self.modified_store:
                     with open(path, 'r') as f:
-                        print "Adding release notes (Improved) for file - [%s]" % (path,)
+                        print "     - Adding release notes (Improved) for file - [%s]" % (path,)
                         raw_content = f.read()
                         cnt = self.load_data(raw_content)
                         ans = self.modified_release_notes(cnt)
@@ -130,19 +130,20 @@ class Content:
                         elif ans is not "":
                             modified_str += ans
                             modified_count += 1
-                    if len(modified_str) > 0:
-                        if self.show_secondary_header():
-                            if modified_count > 1:
-                                section_body += "\n##### " + str(modified_count) + " Improved " + self.get_header() + "\n"
-                            else:
-                                section_body += "\n##### Improved " + self.get_header() + "\n"
-                        section_body += modified_str
+
+                if len(modified_str) > 0:
+                    if self.show_secondary_header():
+                        if modified_count > 1:
+                            section_body += "\n##### " + str(modified_count) + " Improved " + self.get_header() + "\n"
+                        else:
+                            section_body += "\n##### Improved " + self.get_header() + "\n"
+                    section_body += modified_str
             
             # Deleted filed
             if len(self.deleted_store) > 0:
                 section_body += "\n##### Removed " + self.get_header() + "\n"
                 for name in self.deleted_store:
-                    print "Adding release notes (Removed) for - [%s]" % (name,)
+                    print "     - Adding release notes (Removed) for - [%s]" % (name,)
                     section_body += "- __" + name + "__\n"
 
             if missing_release_notes:
@@ -151,7 +152,7 @@ class Content:
                 res = "### " + self.get_header() + "\n"
                 res += section_body
 
-            print "### Finished generate release notes for %s" % (self.get_header(),)
+            print "Finished generate release notes for %s" % (self.get_header(),)
 
         return res
 
