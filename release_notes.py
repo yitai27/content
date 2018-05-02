@@ -102,9 +102,9 @@ class Content:
                 if len(new_str) > 0:
                     if self.show_secondary_header():
                         if new_count > 1:
-                            section_body += "\n#### " + str(new_count) + " New " + self.get_header() + "\n"
+                            section_body += "\n##### " + str(new_count) + " New " + self.get_header() + "\n"
                         else:
-                            section_body += "\n#### New " + self.get_header() + "\n"
+                            section_body += "\n##### New " + self.get_header() + "\n"
                     section_body += new_str
             if len(self.modified_store) > 0:
                 modified_str = ""
@@ -121,12 +121,12 @@ class Content:
                 if len(modified_str) > 0:
                     if self.show_secondary_header():
                         if modified_count > 1:
-                            section_body += "\n#### " + str(modified_count) + " Improved " + self.get_header() + "\n"
+                            section_body += "\n##### " + str(modified_count) + " Improved " + self.get_header() + "\n"
                         else:
-                            section_body += "\n#### Improved " + self.get_header() + "\n"
+                            section_body += "\n##### Improved " + self.get_header() + "\n"
                     section_body += modified_str
             if len(self.deleted_store) > 0:
-                section_body += "\n#### Removed " + self.get_header() + "\n"
+                section_body += "\n##### Removed " + self.get_header() + "\n"
                 for raw_content in self.deleted_store:
                     section_body += "- " + raw_content + "\n"
 
@@ -552,19 +552,19 @@ def main(argv):
     for key in RELEASE_NOTES_ORDER:
         value = release_note_generator[key]
         ans = value.generate_release_notes()
-        print "---------------------------------"
-        print "---"
-        print "ans - " + ans
-        print "---"
+        print "%%%%%%%%%%%%%%%"
+        print "** ans **"
+        print ans
+        print "***"
         if ans is None:
             missing_release_notes = True
         else:
             if len(res) > 0:
                 res += "\n---\n"
-            print "---"
-            print "res - " + res
-            print "---"
-            print "---------------------------------"
+            print "** res **"
+            print res
+            print "***"
+            print "%%%%%%%%%%%%%%%%"
             res += ans
     if missing_release_notes:
         sys.exit(1)
