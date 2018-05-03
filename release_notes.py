@@ -110,7 +110,10 @@ class Content:
 
                     if ans:
                         new_count += 1
-                    new_str += ans
+                        new_str += ans
+                        print "Success"
+                    else:
+                        print "Skipped"
 
             if len(new_str) > 0:
                 if self.show_secondary_header():
@@ -124,7 +127,6 @@ class Content:
         if missing_rn:
             return None
 
-        print "Success"
         return res
 
     def generate_release_notes(self):
