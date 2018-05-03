@@ -87,7 +87,7 @@ class Content:
             new_count = 0
             for path in store:
                 with open(path, 'r') as f:
-                    print "     - Adding release notes (New) for file - [%s]... " % (path,),
+                    print " - adding release notes (New) for file - [%s]... " % (path,),
                     raw_content = f.read()
                     cnt = self.load_data(raw_content)
 
@@ -112,13 +112,14 @@ class Content:
         if missing_rn:
             return None
 
+        print "Success"
         return res
 
     def generate_release_notes(self):
         res = ""
 
         if len(self.modified_store) + len(self.deleted_store) + len(self.added_store) > 0:
-            print "Starting generate release notes for %s" % (self.get_header(),)
+            print "starting %s RN" % (self.get_header(),)
 
             # Added files
             add_rn = self.release_notes_section(self.added_store, "New")
@@ -135,14 +136,13 @@ class Content:
             if len(self.deleted_store) > 0:
                 section_body += "\n##### Removed " + self.get_header() + "\n"
                 for name in self.deleted_store:
-                    print "     - Adding release notes (Removed) for - [%s]" % (name,),
+                    print " - adding release notes (Removed) for - [%s]" % (name,),
                     section_body += "- __" + name + "__\n"
+                    print "Success"
 
             if len(section_body) > 0:
                 res = "### " + self.get_header() + "\n"
                 res += section_body
-
-            print "Success"
 
         return res
 
