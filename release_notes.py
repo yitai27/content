@@ -9,6 +9,10 @@ from Tests.test_utils import print_error
 contentLibPath = "./"
 limitedVersion = False
 
+
+NEW_RN = "New"
+MODIFIED_RN = "Improved"
+
 LAYOUT_TYPE_TO_NAME = {
     "details": "Summary",
     "edit": "New/Edit",
@@ -91,7 +95,15 @@ class Content:
                     raw_content = f.read()
                     cnt = self.load_data(raw_content)
 
-                    ans = self.added_release_notes(cnt)
+                    if title_prefix == NEW_RN:
+                        ans = self.added_release_notes(cnt)
+                    elif title_prefix == MODIFIED_RN:
+                        ans = self.modified_release_notes(cnt)
+                    else:
+                        # should never get here
+                        print_error("Error:\n Unknown release notes type" % (title_prefix,))
+                        return None
+
                     if ans is None:
                         print_error("Error:\n[%s] is missing releaseNotes entry" % (path,))
                         missing_rn = True
@@ -122,10 +134,10 @@ class Content:
             print "starting %s RN" % (self.get_header(),)
 
             # Added files
-            add_rn = self.release_notes_section(self.added_store, "New")
+            add_rn = self.release_notes_section(self.added_store, NEW_RN)
 
             # Modified files
-            modified_rn = self.release_notes_section(self.modified_store, "Improved")
+            modified_rn = self.release_notes_section(self.modified_store, MODIFIED_RN)
 
             if add_rn is None or modified_rn is None:
                 return None
@@ -182,11 +194,11 @@ class PlaybookContent(Content):
         return "Playbooks"
 
     def added_release_notes(self, cnt):
-        rn = cnt.get("releaseNotes", "")
-        if len(rn) > 0 and rn == "-":
+        rn = cnt["releaseNotes"]
+        if rn == "-":
             return ""
 
-        return release_notes_item(cnt["name"], cnt["description"])
+        return release_notes_item(cnt["name"], rn)
 
     def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
