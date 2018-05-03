@@ -43,11 +43,12 @@ def release_notes_item(header, body):
 
 class Content:
     __metaclass__ = abc.ABCMeta
+    show_secondary_header = True
 
     def __init__(self):
         self.modified_store = []  # holds modified file paths
         self.added_store = []  # holds added file paths
-        self.deleted_store = []  # holds deleted file paths
+        self.deleted_store = []  # holds deleted file names
 
     def add(self, change_type, data):
         if change_type == "M":
@@ -74,9 +75,6 @@ class Content:
     @abc.abstractmethod
     def load_data(self, data):
         return
-    
-    def show_secondary_header(self):
-        return True
 
     def generate_release_notes(self):
         res = ""
@@ -93,7 +91,7 @@ class Content:
                 new_count = 0
                 for path in self.added_store:
                     with open(path, 'r') as f:
-                        print "     - Adding release notes (New) for file - [%s]" % (path,)
+                        print "     - Adding release notes (New) for file - [%s]... " % (path,),
                         raw_content = f.read()
                         cnt = self.load_data(raw_content)
     
@@ -107,7 +105,7 @@ class Content:
                         new_str += ans
     
                 if len(new_str) > 0:
-                    if self.show_secondary_header():
+                    if self.show_secondary_header:
                         if new_count > 1:
                             section_body += "\n##### " + str(new_count) + " New " + self.get_header() + "\n"
                         else:
@@ -125,14 +123,14 @@ class Content:
                         cnt = self.load_data(raw_content)
                         ans = self.modified_release_notes(cnt)
                         if ans is None:
-                            print_error("[%s] is missing releaseNotes entry" % (path,))
+                            print_error("Error:\n[%s] is missing releaseNotes entry" % (path,))
                             missing_release_notes = True
                         elif ans is not "":
                             modified_str += ans
                             modified_count += 1
 
                 if len(modified_str) > 0:
-                    if self.show_secondary_header():
+                    if self.show_secondary_header:
                         if modified_count > 1:
                             section_body += "\n##### " + str(modified_count) + " Improved " + self.get_header() + "\n"
                         else:
@@ -152,7 +150,7 @@ class Content:
                 res = "### " + self.get_header() + "\n"
                 res += section_body
 
-            print "Finished generate release notes for %s" % (self.get_header(),)
+            print "Success"
 
         return res
 
@@ -297,6 +295,8 @@ Content.register(WidgetContent)
 
 
 class IncidentFieldContent(Content):
+    show_secondary_header = False
+
     def load_data(self, data):
         return json.loads(data)
 
@@ -309,9 +309,6 @@ class IncidentFieldContent(Content):
             return None
 
         return add_dot(rn) + "\n"
-
-    def show_secondary_header(self):
-        return False
 
     def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
@@ -412,6 +409,8 @@ Content.register(ClassifierContent)
 
 
 class ReputationContent(Content):
+    show_secondary_header = False
+
     def load_data(self, data):
         return json.loads(data)
 
@@ -421,9 +420,6 @@ class ReputationContent(Content):
     def added_release_notes(self, cnt):
         # This should never happen
         return ""
-
-    def show_secondary_header(self):
-        return False
 
     def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")

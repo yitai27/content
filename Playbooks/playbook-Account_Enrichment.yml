@@ -3,6 +3,7 @@ version: -1
 name: Account Enrichment
 system: true
 fromversion: 2.5.0
+releaseNotes: "Account Enrichment 1"
 description: Enrich the accounts under the Account context key with details from relevant
   integrations such as AD.
 starttaskid: "0"
