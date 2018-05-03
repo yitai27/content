@@ -38,7 +38,7 @@ def add_dot(text):
 
 
 def release_notes_item(header, body):
-    return '- ___' + header + '___\n' + add_dot(body) + '\n'
+    return '- __' + header + '__\n' + add_dot(body) + '\n'
 
 
 class Content:
@@ -74,91 +74,80 @@ class Content:
     @abc.abstractmethod
     def load_data(self, data):
         return
-    
+
     def show_secondary_header(self):
         return True
 
+    # create a release notes section for store (add or modified) - return None if found missing release notes
+    def release_notes_section(self, store, title_prefix):
+        res = ""
+        missing_rn = False
+        if len(store) > 0:
+            new_str = ""
+            new_count = 0
+            for path in store:
+                with open(path, 'r') as f:
+                    print "     - Adding release notes (New) for file - [%s]... " % (path,),
+                    raw_content = f.read()
+                    cnt = self.load_data(raw_content)
+
+                    ans = self.added_release_notes(cnt)
+                    if ans is None:
+                        print_error("Error:\n[%s] is missing releaseNotes entry" % (path,))
+                        missing_rn = True
+
+                    if ans:
+                        new_count += 1
+                    new_str += ans
+
+            if len(new_str) > 0:
+                if self.show_secondary_header():
+                    count_str = ""
+                    if new_count > 1:
+                        count_str = " " + str(new_count)
+
+                    res = "\n####%s%s %s\n" % (count_str, title_prefix, self.get_header())
+                res += new_str
+
+        if missing_rn:
+            return None
+
+        return res
+
     def generate_release_notes(self):
         res = ""
-        missing_release_notes = False
 
         if len(self.modified_store) + len(self.deleted_store) + len(self.added_store) > 0:
             print "Starting generate release notes for %s" % (self.get_header(),)
 
-            section_body = ""
-            
-            # Added filed
-            if len(self.added_store) > 0:
-                new_str = ""
-                new_count = 0
-                for path in self.added_store:
-                    with open(path, 'r') as f:
-                        print "     - Adding release notes (New) for file - [%s]" % (path,)
-                        raw_content = f.read()
-                        cnt = self.load_data(raw_content)
-    
-                        ans = self.added_release_notes(cnt)
-                        if ans is None:
-                            print_error("[%s] is missing releaseNotes entry" % (path,))
-                            missing_release_notes = True
-    
-                        if ans:
-                            new_count += 1
-                        new_str += ans
-    
-                if len(new_str) > 0:
-                    if self.show_secondary_header():
-                        if new_count > 1:
-                            section_body += "\n##### " + str(new_count) + " New " + self.get_header() + "\n"
-                        else:
-                            section_body += "\n##### New " + self.get_header() + "\n"
-                    section_body += new_str
-            
-            # Modified filed       
-            if len(self.modified_store) > 0:
-                modified_str = ""
-                modified_count = 0
-                for path in self.modified_store:
-                    with open(path, 'r') as f:
-                        print "     - Adding release notes (Improved) for file - [%s]" % (path,)
-                        raw_content = f.read()
-                        cnt = self.load_data(raw_content)
-                        ans = self.modified_release_notes(cnt)
-                        if ans is None:
-                            print_error("[%s] is missing releaseNotes entry" % (path,))
-                            missing_release_notes = True
-                        elif ans is not "":
-                            modified_str += ans
-                            modified_count += 1
+            # Added files
+            add_rn = self.release_notes_section(self.added_store, "New")
 
-                if len(modified_str) > 0:
-                    if self.show_secondary_header():
-                        if modified_count > 1:
-                            section_body += "\n##### " + str(modified_count) + " Improved " + self.get_header() + "\n"
-                        else:
-                            section_body += "\n##### Improved " + self.get_header() + "\n"
-                    section_body += modified_str
-            
-            # Deleted filed
+            # Modified files
+            modified_rn = self.release_notes_section(self.added_store, "Improved")
+
+            if add_rn is None or modified_rn is None:
+                return None
+
+            section_body = add_rn + modified_rn
+
+            # Deleted files
             if len(self.deleted_store) > 0:
                 section_body += "\n##### Removed " + self.get_header() + "\n"
                 for name in self.deleted_store:
-                    print "     - Adding release notes (Removed) for - [%s]" % (name,)
+                    print "     - Adding release notes (Removed) for - [%s]" % (name,),
                     section_body += "- __" + name + "__\n"
 
-            if missing_release_notes:
-                return None
             if len(section_body) > 0:
                 res = "### " + self.get_header() + "\n"
                 res += section_body
 
-            print "Finished generate release notes for %s" % (self.get_header(),)
+            print "Success"
 
         return res
 
 
 class ScriptContent(Content):
-
     def load_data(self, data):
         return yaml.safe_load(data)
 
@@ -171,7 +160,7 @@ class ScriptContent(Content):
             return ""
         return release_notes_item(cnt["name"], cnt["comment"])
 
-    def modified_release_notes(self,cnt):
+    def modified_release_notes(self, cnt):
         rn = cnt.get("releaseNotes", "")
         if len(rn) == 0:
             return None
@@ -196,7 +185,7 @@ class PlaybookContent(Content):
         rn = cnt.get("releaseNotes", "")
         if len(rn) > 0 and rn == "-":
             return ""
-        
+
         return release_notes_item(cnt["name"], cnt["description"])
 
     def modified_release_notes(self, cnt):
@@ -251,7 +240,7 @@ class DashboardContent(Content):
         rn = cnt.get("releaseNotes", "")
         if len(rn) > 0 and rn == "-":
             return ""
-        
+
         return release_notes_item(cnt["name"], cnt["description"])
 
     def modified_release_notes(self, cnt):
@@ -279,7 +268,7 @@ class WidgetContent(Content):
         rn = cnt.get("releaseNotes", "")
         if len(rn) > 0 and rn == "-":
             return ""
-        
+
         return release_notes_item(cnt["name"], cnt["description"])
 
     def modified_release_notes(self, cnt):
@@ -461,7 +450,6 @@ class IntegrationContent(Content):
 
 
 Content.register(IntegrationContent)
-
 
 release_note_generator = {
     INTEGRATIONS_DIR: IntegrationContent(),
