@@ -124,7 +124,7 @@ class Content:
             add_rn = self.release_notes_section(self.added_store, "New")
 
             # Modified files
-            modified_rn = self.release_notes_section(self.added_store, "Improved")
+            modified_rn = self.release_notes_section(self.modified_store, "Improved")
 
             if add_rn is None or modified_rn is None:
                 return None
