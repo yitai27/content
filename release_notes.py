@@ -196,7 +196,9 @@ class PlaybookContent(Content):
         return "Playbooks"
 
     def added_release_notes(self, cnt):
-        rn = cnt["releaseNotes"]
+        rn = cnt.get("releaseNotes")
+        if not rn:
+            return None
         if rn == "-":
             return ""
 
@@ -435,7 +437,7 @@ class ReputationContent(Content):
         res = ""
 
         if rn != '-':
-            res = add_dot(cnt["releaseNotes"]) + "\n"
+            res = add_dot(rn) + "\n"
         return res
 
 
@@ -459,7 +461,7 @@ class IntegrationContent(Content):
         res = ""
 
         if rn != '-':
-            res = release_notes_item(cnt["name"], cnt["releaseNotes"])
+            res = release_notes_item(cnt["name"], rn)
         return res
 
 
