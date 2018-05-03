@@ -2,7 +2,7 @@ id: CrowdStrike Falcon Sandbox - Detonate file
 version: -1
 name: CrowdStrike Falcon Sandbox - Detonate file
 description: Detonate file through CrowdStrike Falcon Sandbox
-fromversion: "3.5.0"
+fromversion: "3.5.0sdf"
 starttaskid: "0"
 tasks:
   "0":
