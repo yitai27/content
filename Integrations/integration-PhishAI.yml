@@ -17,11 +17,15 @@ configuration:
   defaultvalue: "false"
   type: 8
   required: false
+- display: Insecure connection
+  name: insecure
+  defaultvalue: "false"
+  type: 8
+  required: false
 script:
   script: |2
 
     var TIMEOUT = 20 * 1000;
-    var DONT_CHECK_CERTIFICATE = false;
 
     function phishAiScan(url, apiKey) {
         var ec = {
@@ -47,7 +51,7 @@ script:
                 },
                 Body: JSON.stringify({'url': url})
             },
-            DONT_CHECK_CERTIFICATE,
+            params.insecure,
             params.proxy
         );
         if (initialRes.StatusCode !== 200 && initialRes.StatusCode !== 201) {
@@ -72,7 +76,7 @@ script:
                         'Authorization': [apiKey]
                     }
                 },
-                DONT_CHECK_CERTIFICATE,
+                params.insecure,
                 params.proxy
             );
             if (res.StatusCode !== 200) {
@@ -179,3 +183,4 @@ script:
     description: Check if url is phishing and get details about the brand that is
       being phished
   runonce: true
+releaseNotes: "-"
