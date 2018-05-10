@@ -441,7 +441,7 @@ script:
       required: true
       description: 'The notable events event_id, comma separated for a list '
     - name: owner
-      description: Splunk user to assign to notable event
+      description: Splunk user to assign to notable event, value should be same as in Splunk "Full name" field of the user
     - name: comment
       required: true
       description: Comment to add to notable event
@@ -482,3 +482,4 @@ script:
     description: Parse the Raw part of the event
   dockerimage: demisto/splunksdk:1.0
   isfetch: true
+releaseNotes: "-"
