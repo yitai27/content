@@ -321,6 +321,12 @@
         {
             "integrations": "Cylance Protect v2",
             "playbookID": "Cylance Protect v2 Test"
+        },
+        {
+            "integrations": "XFE",
+            "playbookID": "XFE Test",
+            "timeout": 140,
+            "nightly": true
         }
     ],
     "skipped": [
@@ -395,12 +401,6 @@
         {
             "integrations": "ArcSight Logger",
             "playbookID": "ArcSight Logger test"
-        },
-        {
-            "integrations": "XFE",
-            "playbookID": "XFE Test",
-            "timeout": 140,
-            "nightly": true
         },
         {
             "playbookID": "File Enrichment - Generic Test"
