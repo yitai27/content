@@ -3,6 +3,10 @@
     "testInterval": 20,
     "tests": [
         {
+            "integrations": "McAfee Threat Intelligence Exchange",
+            "playbookID": "McAfee-TIE Test"
+        },
+        {
             "playbookID": "test_url_regex"
         },
         {
@@ -387,10 +391,6 @@
         {
             "integrations": "McAfee Active Response",
             "playbookID": "McAfee-MAR_Test"
-        },
-        {
-            "integrations": "McAfee Threat Intelligence Exchange",
-            "playbookID": "McAfee-TIE Test"
         },
         {
             "integrations": "Tanium",
