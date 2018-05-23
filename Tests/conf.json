@@ -3,8 +3,18 @@
     "testInterval": 20,
     "tests": [
         {
+            "integrations": "XFE",
+            "playbookID": "XFE Test",
+            "timeout": 140,
+            "nightly": true
+        },
+        {
             "integrations": "McAfee Threat Intelligence Exchange",
             "playbookID": "McAfee-TIE Test"
+        },
+        {
+            "integrations": "McAfee Active Response",
+            "playbookID": "McAfee-MAR_Test"
         },
         {
             "playbookID": "test_url_regex"
@@ -325,12 +335,6 @@
         {
             "integrations": "Cylance Protect v2",
             "playbookID": "Cylance Protect v2 Test"
-        },
-        {
-            "integrations": "XFE",
-            "playbookID": "XFE Test",
-            "timeout": 140,
-            "nightly": true
         }
     ],
     "skipped": [
@@ -387,10 +391,6 @@
         {
             "integrations": "Remedy AR",
             "playbookID": "Remedy AR Test"
-        },
-        {
-            "integrations": "McAfee Active Response",
-            "playbookID": "McAfee-MAR_Test"
         },
         {
             "integrations": "Tanium",
