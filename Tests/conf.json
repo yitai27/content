@@ -13,10 +13,6 @@
             "playbookID": "McAfee-TIE Test"
         },
         {
-            "integrations": "McAfee Active Response",
-            "playbookID": "McAfee-MAR_Test"
-        },
-        {
             "playbookID": "test_url_regex"
         },
         {
@@ -344,6 +340,10 @@
                 "byoi": true
             },
             "playbookID": "CarbonBlackResponseTest"
+        },
+        {
+            "integrations": "McAfee Active Response",
+            "playbookID": "McAfee-MAR_Test"
         },
         {
             "integrations": "Cisco Umbrella Investigate",
