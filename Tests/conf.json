@@ -8,10 +8,6 @@
             "timeout": 140
         },
         {
-            "integrations": "McAfee Threat Intelligence Exchange",
-            "playbookID": "McAfee-TIE Test"
-        },
-        {
             "playbookID": "test_url_regex"
         },
         {
@@ -333,6 +329,10 @@
         }
     ],
     "skipped": [
+        {
+            "integrations": "McAfee Threat Intelligence Exchange",
+            "playbookID": "McAfee-TIE Test"
+        },
         {
             "integrations": {
                 "name": "carbonblack-v2",
