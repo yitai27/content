@@ -8,6 +8,10 @@
             "timeout": 140
         },
         {
+            "integrations": "ArcSight Logger",
+            "playbookID": "ArcSight Logger test"
+        },
+        {
             "playbookID": "test_url_regex"
         },
         {
@@ -396,10 +400,6 @@
             "playbookID": "Tanium Demo Playbook",
             "nightly": true,
             "timeout": 1200
-        },
-        {
-            "integrations": "ArcSight Logger",
-            "playbookID": "ArcSight Logger test"
         },
         {
             "playbookID": "File Enrichment - Generic Test"
