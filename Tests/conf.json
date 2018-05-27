@@ -5,8 +5,7 @@
         {
             "integrations": "XFE",
             "playbookID": "XFE Test",
-            "timeout": 140,
-            "nightly": true
+            "timeout": 140
         },
         {
             "integrations": "McAfee Threat Intelligence Exchange",
