@@ -3,6 +3,123 @@
     "testInterval": 20,
     "tests": [
         {
+            "integrations": "McAfee Threat Intelligence Exchange",
+            "playbookID": "McAfee-TIE Test"
+        }
+    ],
+    "skipped": [
+
+        {
+            "integrations": {
+                "name": "carbonblack-v2",
+                "byoi": true
+            },
+            "playbookID": "CarbonBlackResponseTest"
+        },
+        {
+            "integrations": "McAfee Active Response",
+            "playbookID": "McAfee-MAR_Test"
+        },
+        {
+            "integrations": "Cisco Umbrella Investigate",
+            "playbookID": "Cisco-Umbrella-Test"
+        },
+        {
+            "integrations": "icebrg",
+            "playbookID": "Icebrg Test",
+            "timeout" : 500
+        },
+        {
+            "integrations": "Symantec MSS",
+            "playbookID": "SymantecMSSTest"
+        },
+        {
+            "integrations": "Joe Security",
+            "playbookID": "JoeSecurityTestPlaybook",
+            "timeout": 500
+        },
+        {
+            "playbookID": "TestParseCSV"
+        },
+        {
+            "integrations": "VMware",
+            "playbookID": "VMWare Test"
+        },
+        {
+            "integrations": [
+                "AlienVault OTX",
+                {
+                    "name": "activedir",
+                    "byoi": false
+                }],
+            "playbookID": "entity_enrichment_generic_test",
+            "timeout": 240
+        },
+        {
+            "integrations": [
+                "AlienVault OTX",
+                "urlscan.io"
+            ],
+            "playbookID": "url_enrichment_-_generic_test",
+            "timeout": 400
+        },
+        {
+            "integrations": "Remedy AR",
+            "playbookID": "Remedy AR Test"
+        },
+        {
+            "integrations": "Tanium",
+            "playbookID": "Tanium Demo Playbook",
+            "nightly": true,
+            "timeout": 1200
+        },
+        {
+            "playbookID": "File Enrichment - Generic Test"
+        },
+        {
+            "integrations": [
+                "FalconHost",
+                "McAfee Threat Intelligence Exchange",
+                {
+                    "name": "carbonblackprotection",
+                    "byoi": false
+                },
+                {
+                    "name": "carbonblack",
+                    "byoi": false
+                }
+            ],
+            "playbookID": "search_endpoints_by_hash_-_generic_-_test",
+            "timeout": 500
+        },
+        {
+            "integrations": "McAfee Threat Intelligence Exchange",
+            "playbookID": "search_endpoints_by_hash_-_tie_-_test",
+            "timeout": 500
+        },
+        {
+            "integrations": "iDefense",
+            "playbookID": "iDefenseTest",
+            "timeout": 300
+        },
+        {
+            "integrations": "LogRhythm",
+            "playbookID": "LogRhythm-Test-Playbook",
+            "timeout": 200
+        },
+        {
+            "integrations": "FireEye HX",
+            "playbookID": "FireEye HX Test"
+        },
+        {
+            "integrations": "Phish.AI",
+            "playbookID": "PhishAi-Test"
+        },
+        {
+            "integrations": "Centreon",
+            "playbookID": "Centreon-Test-Playbook"
+        },
+        {
             "integrations": "XFE",
             "playbookID": "XFE Test",
             "timeout": 140
@@ -330,122 +447,6 @@
         {
             "integrations": "Cylance Protect v2",
             "playbookID": "Cylance Protect v2 Test"
-        }
-    ],
-    "skipped": [
-        {
-            "integrations": "McAfee Threat Intelligence Exchange",
-            "playbookID": "McAfee-TIE Test"
-        },
-        {
-            "integrations": {
-                "name": "carbonblack-v2",
-                "byoi": true
-            },
-            "playbookID": "CarbonBlackResponseTest"
-        },
-        {
-            "integrations": "McAfee Active Response",
-            "playbookID": "McAfee-MAR_Test"
-        },
-        {
-            "integrations": "Cisco Umbrella Investigate",
-            "playbookID": "Cisco-Umbrella-Test"
-        },
-        {
-            "integrations": "icebrg",
-            "playbookID": "Icebrg Test",
-            "timeout" : 500
-        },
-        {
-            "integrations": "Symantec MSS",
-            "playbookID": "SymantecMSSTest"
-        },
-        {
-            "integrations": "Joe Security",
-            "playbookID": "JoeSecurityTestPlaybook",
-            "timeout": 500
-        },
-        {
-            "playbookID": "TestParseCSV"
-        },
-        {
-            "integrations": "VMware",
-            "playbookID": "VMWare Test"
-        },
-        {
-            "integrations": [
-                "AlienVault OTX",
-                {
-                    "name": "activedir",
-                    "byoi": false
-                }],
-            "playbookID": "entity_enrichment_generic_test",
-            "timeout": 240
-        },
-        {
-            "integrations": [
-                "AlienVault OTX",
-                "urlscan.io"
-            ],
-            "playbookID": "url_enrichment_-_generic_test",
-            "timeout": 400
-        },
-        {
-            "integrations": "Remedy AR",
-            "playbookID": "Remedy AR Test"
-        },
-        {
-            "integrations": "Tanium",
-            "playbookID": "Tanium Demo Playbook",
-            "nightly": true,
-            "timeout": 1200
-        },
-        {
-            "playbookID": "File Enrichment - Generic Test"
-        },
-        {
-            "integrations": [
-                "FalconHost",
-                "McAfee Threat Intelligence Exchange",
-                {
-                    "name": "carbonblackprotection",
-                    "byoi": false
-                },
-                {
-                    "name": "carbonblack",
-                    "byoi": false
-                }
-            ],
-            "playbookID": "search_endpoints_by_hash_-_generic_-_test",
-            "timeout": 500
-        },
-        {
-            "integrations": "McAfee Threat Intelligence Exchange",
-            "playbookID": "search_endpoints_by_hash_-_tie_-_test",
-            "timeout": 500
-        },
-        {
-            "integrations": "iDefense",
-            "playbookID": "iDefenseTest",
-            "timeout": 300
-        },
-        {
-            "integrations": "LogRhythm",
-            "playbookID": "LogRhythm-Test-Playbook",
-            "timeout": 200
-        },
-        {
-            "integrations": "FireEye HX",
-            "playbookID": "FireEye HX Test"
-        },
-        {
-            "integrations": "Phish.AI",
-            "playbookID": "PhishAi-Test"
-        },
-        {
-            "integrations": "Centreon",
-            "playbookID": "Centreon-Test-Playbook"
         }
     ]
 }
