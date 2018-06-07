@@ -191,7 +191,7 @@
 					}
 				}
 			},
-			"dontMapEventToLabels": false
+			"dontMapEventToLabels": true
 		}
 	},
 	"unclassifiedCases": {},
