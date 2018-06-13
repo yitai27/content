@@ -55,7 +55,13 @@ jobs:
       - run:
           name: Run Tests
           shell: /bin/bash
-          command: ./Tests/scripts/run_tests.sh
+          command: |
+            ./Tests/scripts/run_tests.sh
+            sleep 9m
+            sleep 9m
+            sleep 9m
+            sleep 9m
+            sleep 9m
       - run:
           name: Destroy Instances
           command: ./Tests/scripts/destroy_instances.sh $CIRCLE_ARTIFACTS
