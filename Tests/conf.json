@@ -30,6 +30,16 @@
             "timeout": 240
         },
         {
+            "integrations": "ArcSight Logger",
+            "playbookID": "ArcSight Logger test"
+        },
+        {
+            "integrations": "XFE",
+            "playbookID": "XFE Test",
+            "timeout": 140,
+            "nightly": true
+        },
+        {
             "integrations": "RSA NetWitness Packets and Logs",
             "playbookID": "rsa_packets_and_logs_test"
         },
@@ -414,16 +424,6 @@
             "playbookID": "Tanium Demo Playbook",
             "nightly": true,
             "timeout": 1200
-        },
-        {
-            "integrations": "ArcSight Logger",
-            "playbookID": "ArcSight Logger test"
-        },
-        {
-            "integrations": "XFE",
-            "playbookID": "XFE Test",
-            "timeout": 140,
-            "nightly": true
         },
         {
             "playbookID": "File Enrichment - Generic Test"
