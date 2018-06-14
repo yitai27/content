@@ -19,7 +19,7 @@ configuration:
   defaultvalue: ""
   type: 4
   required: true
-- display: Trust certificate (insecure)
+- display: Trust any certificate (unsecure)
   name: insecure
   defaultvalue: "false"
   type: 8
