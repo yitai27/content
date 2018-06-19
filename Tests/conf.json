@@ -3,6 +3,9 @@
     "testInterval": 20,
     "tests": [
         {
+            "playbookID": "File Enrichment - Generic Test"
+        },
+        {
             "integrations": "Palo Alto Minemeld",
             "playbookID": "minemeld_test"
         },
@@ -51,9 +54,6 @@
             "timeout": 240
         },
         {
-            "playbookID": "File Enrichment - Generic Test"
-        },
-        {
             "integrations": "Anomali ThreatStream",
             "playbookID": "Anomali_ThreatStream_Test"
         },
@@ -64,14 +64,6 @@
         {
             "integrations": "Symantec Endpoint Protection",
             "playbookID": "sep_-_test_endpoint_search"
-        },
-        {
-            "integrations": [
-                "AlienVault OTX",
-                "urlscan.io"
-            ],
-            "playbookID": "url_enrichment_-_generic_test",
-            "timeout": 500
         },
         {
             "integrations": {
@@ -123,6 +115,14 @@
                 "byoi": false
             },
             "playbookID": "block_endpoint_-_carbon_black_response_-_test"
+        },
+        {
+            "integrations": [
+                "AlienVault OTX",
+                "urlscan.io"
+            ],
+            "playbookID": "url_enrichment_-_generic_test",
+            "timeout": 500
         },
         {
             "integrations": "FalconHost",
