@@ -16,7 +16,7 @@
 	},
 	"custom": true,
 	"transformer": {
-		"simple": "asd",
+		"simple": "OVERRIDE",
 		"complex": null
 	},
 	"keyTypeMap": {
