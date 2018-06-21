@@ -1,0 +1,26 @@
+{
+	"id": "aed17354-f824-4bfd-8164-a5b0ece6d417",
+	"version": -1,
+	"modified": "2018-06-21T14:15:50.981152426+03:00",
+	"defaultIncidentType": "DeviceLost",
+	"mapping": {
+		"Access": {
+			"internalMapping": {
+				"attachment": {
+					"simple": "sdf",
+					"complex": null
+				}
+			},
+			"dontMapEventToLabels": false
+		}
+	},
+	"custom": true,
+	"transformer": {
+		"simple": "asd",
+		"complex": null
+	},
+	"keyTypeMap": {
+		"sdf": "Access"
+	},
+	"brandName": "Sample Incident Generator",
+}
