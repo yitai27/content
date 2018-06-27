@@ -290,6 +290,16 @@ script:
                     'get note'),
                 'QRadar get note',
                 headers);
+        case 'qradar-get-object':
+            if (args.objectValue.indexOf(',') != -1){
+                objectValues = args.objectValue.split(",");
+                var res = [];
+                for (i = 0; i < objectValues.length; i++){
+                    res.push(addHumanRedable(sendRequest('GET', server + 'api/siem/' + args.objectName + '/' + objectValues[i]), 'QRadar Object ' + args.objectName, headers));
+                }
+                return res;
+            }
+            return addHumanRedable(sendRequest('GET', server + 'api/siem/' + args.objectName + '/' + args.objectValue), 'QRadar Object ' + args.objectName, headers);
     }
   type: javascript
   commands:
@@ -532,5 +542,20 @@ script:
     - name: headers
       description: Table headers
     description: Retrieve a note for an offense
+  - name: qradar-get-object
+    arguments:
+    - name: objectName
+      required: true
+      auto: PREDEFINED
+      predefined:
+      - source_addresses
+      - local_destination_addresses
+      description: The object name, for example source_addresses
+    - name: objectValue
+      required: true
+      description: The Value of the desired object
+    description: Get the information of an object from Qradar, for example the IP
+      address of an address id
   isfetch: true
   runonce: false
+- releaseNotes: "Added qradar-get-object command"
