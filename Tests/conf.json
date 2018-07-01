@@ -3,8 +3,7 @@
     "testInterval": 20,
     "tests": [
         {
-            "integrations": "Palo Alto Minemeld",
-            "playbookID": "minemeld_test"
+            "playbookID": "buildewsquery_test"
         },
         {
             "integrations": "EWS Mail Sender",
@@ -172,7 +171,8 @@
         },
         {
             "integrations": "Qualys",
-            "playbookID": "Qualys-Test"
+            "playbookID": "Qualys-Test",
+            "nightly": true
         },
         {
             "integrations": {
@@ -356,9 +356,18 @@
         },
         {
             "playbookID": "test-domain-indicator"
+        },
+        {
+            "integrations": "Intezer",
+            "playbookID": "Intezer Testing"
         }
     ],
     "skipped": [
+        {
+
+            "integrations": "Farsight DNSDB",
+            "playbookID": "DNSDBTest"
+        },
         {
             "integrations": "Cybereason",
             "playbookID": "Cybereason Test"
@@ -484,6 +493,10 @@
         {
             "integrations": "AlphaSOC Wisdom",
             "playbookID": "AlphaSOC-Wisdom-Test"
+        },
+        {
+            "integrations": "Palo Alto Minemeld",
+            "playbookID": "minemeld_test"
         }
     ]
 }
