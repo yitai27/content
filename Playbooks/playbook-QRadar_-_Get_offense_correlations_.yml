@@ -3,6 +3,7 @@ version: -1
 name: QRadar - Get offense correlations
 fromversion: 3.5.0
 toversion: 3.6.1
+releaseNotes: "-"
 description: |-
   Run on a QRadar offense to get more information
 
