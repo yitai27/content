@@ -59,7 +59,7 @@ script:
     var password = params.credentials ? params.credentials.password : '';
     var token = params.token;
     if (!token && !password) {
-        throw 'Either credentials or auth token should be provided.'
+        throw 'Either credentials or auth token should be provided.';
     }
     var server = params.server+'/';
     var insecure = params.insecure;
@@ -76,8 +76,8 @@ script:
             "name": incident.id + ' ' + incident.description,
             "labels": labels,
             "rawJSON": JSON.stringify(incident)
-        }
-    }
+        };
+    };
 
     var sendRequest = function(method, url, headers, queryName, body) {
         var httpParams = {
@@ -109,7 +109,7 @@ script:
             logInfo('QRadar error: Could stringify respons for ' + url + '. Error is ' + err + '. Returned body is ' + res.Body);
             throw 'QRadar error\n Could stringify respons for ' + url + '\n Error is ' + err + '\n Returned body is ' + res.Body;
         }
-    }
+    };
 
     var getOffenses = function(filter, fields, range) {
         var urlArgs = {};
@@ -124,7 +124,7 @@ script:
             headers.Range = ['items=' + range];
         }
         return sendRequest('GET', server + 'api/siem/offenses' + encodeToURLQuery(urlArgs), headers, 'siem offenses');
-    }
+    };
 
     var search = function(query_expression, fields) {
         var urlArgs = {query_expression: query_expression};
@@ -132,7 +132,7 @@ script:
             urlArgs.fields = fields;
         }
         return sendRequest('POST', server + 'api/ariel/searches' + encodeToURLQuery(urlArgs), {'Content-Type': ['application/json']}, 'searches');
-    }
+    };
 
     var getClosingReasons = function(filter, fields, include_deleted, include_reserved, range) {
         var urlArgs = {};
@@ -153,7 +153,7 @@ script:
             headers.Range = ['items=' + range];
         }
         return sendRequest('GET', server + 'api/siem/offense_closing_reasons' + encodeToURLQuery(urlArgs), headers);
-    }
+    };
 
     var getSearch = function(search_id, fields) {
         var urlArgs = {};
@@ -161,7 +161,7 @@ script:
             urlArgs.fields = fields;
         }
         return sendRequest('GET', server + 'api/ariel/searches/' + search_id + encodeToURLQuery(urlArgs), {'Content-Type': ['application/json']}, 'get search');
-    }
+    };
 
     var getSearchResults = function(search_id, range) {
         var headers = {'Content-Type': ['application/json']};
@@ -169,9 +169,9 @@ script:
             headers.Range = ['items=' + range];
         }
         return sendRequest('GET', server + 'api/ariel/searches/' + search_id + '/results', headers, 'get search results');
-    }
+    };
 
-    var getAssets = function(query_expression, fields, range) {
+    var getAssets = function(filter, fields, range) {
         var headers = {'Content-Type': ['application/json']};
         if (range) {
             headers.Range = ['items=' + range];
@@ -180,21 +180,57 @@ script:
         if (fields) {
             urlArgs.fields = fields;
         }
-        if (query_expression) {
-            urlArgs.query_expression = query_expression;
+        if (filter) {
+            urlArgs.filter = filter;
         }
         return sendRequest('GET', server + 'api/asset_model/assets' + encodeToURLQuery(urlArgs), headers, 'get-assets');
-    }
+    };
 
     var addHumanRedable = function(object, title, headers, path) {
-      var obj = path ? dq(object, path) : object;
-      return {
-        Type: entryTypes.note,
-        Contents: object,
-        ContentsFormat: formats.json,
-        HumanReadable: obj && ((obj instanceof Array && obj.length >0) || (obj instanceof Object && Object.keys(obj).length > 0)) ? tblToMd(title, obj, headers) : 'no results'
-      };
-    }
+        var obj = path ? dq(object, path) : object;
+        return {
+            Type: entryTypes.note,
+            Contents: object,
+            ContentsFormat: formats.json,
+            HumanReadable: obj && ((obj instanceof Array && obj.length >0) || (obj instanceof Object && Object.keys(obj).length > 0)) ? tblToMd(title, obj, headers) : 'no results'
+        };
+    };
+
+    var getAssetsCommand = function(assets, headers) {
+        var markdown = '';
+
+        if (assets && (assets instanceof Array && assets.length > 0)) {
+            var readableAssets = [];
+            for (var i = 0; i < assets.length; i++) {
+                var asset = assets[i];
+                readableAssets.push({
+                    'Id': dq(asset, 'id'),
+                    'IP Address': dq(asset, 'interfaces.ip_addresses.value'),
+                    'Asset Name': dq(asset, 'id'),
+                    'Operating System': dq(asset, 'id'),
+                    'Aggregated CVSS': dq(asset, 'id'),
+                    'Vulnerabilities': dq(asset, 'id'),
+                    'Services': dq(asset, 'id'),
+                    'Last User': dq(asset, 'id'),
+                    'User Last Seen': dq(asset, 'id')
+                });
+            }
+            // markdown = tableToMarkdown('QRadar get assets', readableAssets, headers || ['Id', 'IP Address', 'Asset Name', 'Operating System', 'Aggregated CVSS', 'Vulnerabilities', 'Services', 'Last User', 'User Last Seen']);
+            markdown = tableToMarkdown('QRadar get assets', assets, headers);
+        } else {
+            markdown = 'no results';
+        }
+
+        return {
+            Type: entryTypes.note,
+            Contents: assets,
+            ContentsFormat: formats.json,
+            HumanReadable: markdown,
+            EntryContext: {
+                'QRadar.Assets(val.id == obj.id)': assets || []
+            }
+        };
+    };
 
     var updateOffense = function(offense_id, args) {
         if (!args['closing_reason_id'] && args['status'] === 'CLOSED') {
@@ -257,7 +293,7 @@ script:
             return addHumanRedable(getOffenses(args.filter, args.fields, args.range), 'QRadar offenses', headers);
         case 'qr-get-assets':
         case 'qradar-get-assets':
-            return addHumanRedable(getAssets(args.filter, args.fields, args.range), 'QRadar get assets', headers);
+            return getAssetsCommand(getAssets(args.filter, args.fields, args.range), headers);
         case 'qr-update-offense':
         case 'qradar-update-offense':
             return addHumanRedable(updateOffense(args.offense_id, args), 'QRadar update offense', headers);
@@ -373,13 +409,56 @@ script:
   - name: qradar-get-assets
     arguments:
     - name: range
-      description: Number of results in return
+      description: 'Optional - Use this parameter to restrict the number of elements
+        that are returned in the list to a specified range. The list is indexed starting
+        at zero. Sample:  items=0-5'
     - name: fields
-      description: Fields to filter in
+      description: "Optional - Use this parameter to specify which fields you would
+        like to get back in the response. Fields that are not named are excluded.
+        Specify subfields in brackets and multiple fields in the same object are separated
+        by commas. Sample: \tfield_one (field_two, field_three),field_four"
     - name: filter
-      description: Query to filter offenses
+      description: 'Optional - This parameter is used to restrict the elements in
+        a list base on the contents of various fields. Sample: field_one = "String"
+        and field_two > 42 or not field_three in (1, 2, 3)'
     - name: headers
       description: Table headers
+    outputs:
+    - contextPath: QRadar.Assets.id
+      description: The id of the asset (e.g 1001)
+      type: number
+    - contextPath: QRadar.Assets.domain_id
+    - contextPath: QRadar.Assets.interfaces
+      description: Network interfaces of the asset
+    - contextPath: QRadar.Assets.interfaces.id
+      description: Interface id
+      type: number
+    - contextPath: QRadar.Assets.interfaces.mac_address
+      description: MAC Address
+      type: string
+    - contextPath: QRadar.Assets.interfaces.ip_addresses
+      description: 'IP addresses '
+    - contextPath: QRadar.Assets.interfaces.ip_addresses.id
+      type: number
+    - contextPath: QRadar.Assets.interfaces.ip_addresses.value
+      description: IP address (e.g 10.0.0.1)
+      type: string
+    - contextPath: QRadar.Assets.interfaces.ip_addresses.type
+    - contextPath: QRadar.Assets.interfaces.ip_addresses.network_id
+    - contextPath: QRadar.Assets.properties.id
+    - contextPath: QRadar.Assets.properties.name
+      description: Property name (e.g Unified Name)
+      type: string
+    - contextPath: QRadar.Assets.properties.value
+      description: Property value (e.g 10.0.0.1)
+    - contextPath: QRadar.Assets.properties.type_id
+      description: ""
+    - contextPath: QRadar.Assets.properties.last_reported_by
+      description: Username who last reported
+      type: string
+    - contextPath: QRadar.Assets.properties.last_reported
+      description: Last reported time (in milliseconds)
+      type: number
     description: List all assets found in the model
   - name: qr-offenses
     deprecated: true
@@ -534,3 +613,4 @@ script:
     description: Retrieve a note for an offense
   isfetch: true
   runonce: false
+releaseNotes: "Fix qradar-get-assets, filter was not passed. qradar-get-assets now has also outputs`
