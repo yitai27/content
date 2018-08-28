@@ -444,7 +444,12 @@ script:
             mailbox_ids = map(lambda x: x[MAILBOX_ID], mailboxes)
 
         try:
-            search_results = SearchMailboxes(protocol=protocol).call(filter, mailbox_ids)
+            search_results = []
+            slices = [mailbox_ids[i:i + 15000] for i in xrange(0, len(mailbox_ids), 15000)]
+            for s in slices:
+                search_results = SearchMailboxes(protocol=protocol).call(filter, s)
+                if len(search_results) > limit:
+                    break
             search_results = search_results[:limit]
         except TransportError, e:
             if "ItemCount>0<" in str(e):
@@ -1866,4 +1871,4 @@ script:
   dockerimage: demisto/py-ews:2.0
   isfetch: true
   runonce: false
-releaseNotes: "Added command ews-get-folder, which returns a single specific folder"
+releaseNotes: "Added ability to search more than 20,000 mailboxes."
