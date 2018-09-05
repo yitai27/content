@@ -1686,6 +1686,7 @@
 			"unmapped": false,
 			"unsearchable": false
 		}
-	]
+	],
+	"releaseNotes": "Added In-Reply-To field to incident details."
 }
 

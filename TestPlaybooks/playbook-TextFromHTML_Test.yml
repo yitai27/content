@@ -96,3 +96,4 @@ view: |-
   }
 inputs: []
 outputs: []
+releaseNotes: Test playbook for the textfromhtml script

@@ -22,3 +22,4 @@ args:
   description: Domain to look up
 scripttarget: 0
 runonce: false
+releaseNotes: Domain argument marked as default, so script can be executed as ehnancement on Domain indicators
