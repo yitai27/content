@@ -1,7 +1,7 @@
 id: process_email_-_generic
 version: -1
 name: Process Email - Generic
-fromversion: 4.0.0
+fromversion: 4.0
 description: Add email details to the relevant context entities and handle the case
   where original emails are attached.
 starttaskid: "0"
@@ -24,17 +24,17 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 367.5,
+          "x": 377.5,
           "y": 50
         }
       }
     note: false
   "1":
     id: "1"
-    taskid: be757276-3df5-4c10-87a9-7a5b49646bff
+    taskid: 70863b9a-af3f-4f0a-8e91-cae2c88f5488
     type: condition
     task:
-      id: be757276-3df5-4c10-87a9-7a5b49646bff
+      id: 70863b9a-af3f-4f0a-8e91-cae2c88f5488
       version: -1
       name: Do we have original emails attached?
       description: Check if we have any attachments with relevant attachment types
@@ -50,15 +50,15 @@ tasks:
       - "3"
     scriptarguments:
       value:
-        simple: ${inputs.File((val.Type.toLowerCase().indexOf('composite document
-                  file v2 document') >= 0 || val.Type.toLowerCase().indexOf('rfc 822 mail') >= 0 ||
-                  val.Extension == 'eml') && val.Type.toLowerCase().indexOf('ascii') >= 0 &&
-                  val.Type.toLowerCase().indexOf('crlf') >= 0).EntryID}
+        simple: ${inputs.File(val.Type.toLowerCase().indexOf('composite document file
+          v2 document') >= 0 || val.Type.toLowerCase().indexOf('rfc 822 mail') >=
+          0 || val.Extension == 'eml' && val.Type.toLowerCase().indexOf('ascii') >=
+          0 && val.Type.toLowerCase().indexOf('crlf') >= 0).EntryID}
     separatecontext: false
     view: |-
       {
         "position": {
-          "x": 367.5,
+          "x": 377.5,
           "y": 195
         }
       }
@@ -99,10 +99,10 @@ tasks:
     note: false
   "3":
     id: "3"
-    taskid: ba7f4d0b-5fab-436a-877c-c5cfaac66580
+    taskid: 4ac2b332-b76d-463e-824e-717895c5b644
     type: regular
     task:
-      id: ba7f4d0b-5fab-436a-877c-c5cfaac66580
+      id: 4ac2b332-b76d-463e-824e-717895c5b644
       version: -1
       name: Add original email attachments to context
       description: ""
@@ -116,16 +116,16 @@ tasks:
     scriptarguments:
       entryid:
         simple: ${inputs.File(val.Type.toLowerCase().indexOf('composite document file
-          v2 document') >= 0 || val.Type.toLowerCase().indexOf('rfc 822 mail') >= 0 ||
-          val.Extension == 'eml' && val.Type.toLowerCase().indexOf('ascii') >= 0 &&
-          val.Type.toLowerCase().indexOf('crlf') >= 0).EntryID}
+          v2 document') >= 0 || val.Type.toLowerCase().indexOf('rfc 822 mail') >=
+          0 || val.Extension == 'eml' && val.Type.toLowerCase().indexOf('ascii') >=
+          0 && val.Type.toLowerCase().indexOf('crlf') >= 0).EntryID}
     results:
     - AttachmentName
     separatecontext: false
     view: |-
       {
         "position": {
-          "x": 695,
+          "x": 592.5,
           "y": 720
         }
       }
@@ -161,7 +161,7 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 367.5,
+          "x": 377.5,
           "y": 1215
         }
       }
@@ -194,7 +194,7 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 480,
+          "x": 490,
           "y": 1390
         }
       }
@@ -215,7 +215,7 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 367.5,
+          "x": 377.5,
           "y": 1915
         }
       }
@@ -239,17 +239,17 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 367.5,
+          "x": 377.5,
           "y": 1070
         }
       }
     note: false
   "13":
     id: "13"
-    taskid: 290c46f5-b31b-412e-860a-5758b94081ad
+    taskid: 5396db88-5a6a-4e25-8a9f-40c5c27aaedf
     type: regular
     task:
-      id: 290c46f5-b31b-412e-860a-5758b94081ad
+      id: 5396db88-5a6a-4e25-8a9f-40c5c27aaedf
       version: -1
       name: Set incident with the Email object data
       description: ""
@@ -269,12 +269,7 @@ tasks:
       attachmenthash: {}
       attachmentid: {}
       attachmentitem: {}
-      attachmentname:
-        complex:
-          root: Email
-          accessor: Attachments
-          transformers:
-          - operator: Stringify
+      attachmentname: {}
       attachmentsize: {}
       attachmenttype: {}
       backupowner: {}
@@ -300,12 +295,7 @@ tasks:
           accessor: Text
           transformers:
           - operator: Stringify
-      emailbodyformat:
-        complex:
-          root: Email
-          accessor: Format
-          transformers:
-          - operator: Stringify
+      emailbodyformat: {}
       emailbodyhtml:
         complex:
           root: Email
@@ -327,164 +317,13 @@ tasks:
           transformers:
           - operator: uniq
           - operator: Stringify
-      emailinreplyto:
-        complex:
-          root: Email
-          filters:
-          - - operator: isEqualString
-              left:
-                value:
-                  simple: Email.Headers.name
-                iscontext: true
-              right:
-                value:
-                  simple: In-Reply-To
-          accessor: Headers
-          transformers:
-          - operator: WhereFieldEquals
-            args:
-              equalTo:
-                value:
-                  simple: In-Reply-To
-              field:
-                value:
-                  simple: name
-              getField:
-                value:
-                  simple: value
-          - operator: StripChars
-            args:
-              chars:
-                value:
-                  simple: <>
       emailkeywords: {}
-      emailmessageid:
-        complex:
-          root: Email
-          filters:
-          - - operator: isEqualString
-              left:
-                value:
-                  simple: Email.Headers.name
-                iscontext: true
-              right:
-                value:
-                  simple: Message-ID
-          accessor: Headers
-          transformers:
-          - operator: WhereFieldEquals
-            args:
-              equalTo:
-                value:
-                  simple: Message-ID
-              field:
-                value:
-                  simple: name
-              getField:
-                value:
-                  simple: value
-          - operator: StripChars
-            args:
-              chars:
-                value:
-                  simple: <>
+      emailmessageid: {}
       emailreceived: {}
-      emailreplyto:
-        complex:
-          root: Email
-          filters:
-          - - operator: isEqualString
-              left:
-                value:
-                  simple: Email.Headers.name
-                iscontext: true
-              right:
-                value:
-                  simple: Reply-To
-          accessor: Headers
-          transformers:
-          - operator: WhereFieldEquals
-            args:
-              equalTo:
-                value:
-                  simple: Reply-To
-              field:
-                value:
-                  simple: name
-              getField:
-                value:
-                  simple: value
-          - operator: StripChars
-            args:
-              chars:
-                value:
-                  simple: <>
-      emailreturnpath:
-        complex:
-          root: Email
-          filters:
-          - - operator: isEqualString
-              left:
-                value:
-                  simple: Email.Headers.name
-                iscontext: true
-              right:
-                value:
-                  simple: Return-Path
-          accessor: Headers
-          transformers:
-          - operator: WhereFieldEquals
-            args:
-              equalTo:
-                value:
-                  simple: Return-Path
-              field:
-                value:
-                  simple: name
-              getField:
-                value:
-                  simple: value
-          - operator: StripChars
-            args:
-              chars:
-                value:
-                  simple: <>
-      emailsenderip:
-        complex:
-          root: Email
-          filters:
-          - - operator: isEqualString
-              left:
-                value:
-                  simple: Email.Headers.name
-                iscontext: true
-              right:
-                value:
-                  simple: x-originating-ip
-          accessor: Headers
-          transformers:
-          - operator: WhereFieldEquals
-            args:
-              equalTo:
-                value:
-                  simple: x-originating-ip
-              field:
-                value:
-                  simple: name
-              getField:
-                value:
-                  simple: value
-          - operator: StripChars
-            args:
-              chars:
-                value:
-                  simple: '[]'
-      emailsize:
-        complex:
-          root: Email
-          accessor: Text
-          transformers:
-          - operator: strLength
+      emailreplyto: {}
+      emailreturnpath: {}
+      emailsenderip: {}
+      emailsize: {}
       emailsource: {}
       emailsubject:
         complex:
@@ -555,7 +394,7 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 695,
+          "x": 592.5,
           "y": 895
         }
       }
@@ -673,7 +512,7 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 592.5,
+          "x": 377.5,
           "y": 1740
         }
       }
@@ -707,7 +546,7 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 480,
+          "x": 490,
           "y": 1565
         }
       }
@@ -745,7 +584,7 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 152.5,
+          "x": 263,
           "y": 370
         }
       }
@@ -770,7 +609,7 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 265,
+          "x": 50,
           "y": 545
         }
       }
@@ -804,8 +643,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 265,
-          "y": 720
+          "x": 50,
+          "y": 698
         }
       }
     note: false
@@ -815,7 +654,7 @@ view: |-
     "paper": {
       "dimensions": {
         "height": 1930,
-        "width": 1025,
+        "width": 922.5,
         "x": 50,
         "y": 50
       }
@@ -929,4 +768,3 @@ outputs:
 - contextPath: File
   description: The File object
   type: unknown
-releaseNotes: "Added Email headers to the processing."

@@ -404,10 +404,9 @@ script: |-
       def __call__(self, message):
           self.messages.append('%s' % (message, ))
 
-      def print_log(self, verbose=False):
+      def print_log(self, ):
           text = 'Full Integration Log:\n' + '\n'.join(self.messages)
-          if verbose:
-            demisto.log(text)
+          demisto.log(text)
           demisto.info(text)
 
   """
@@ -568,7 +567,7 @@ script: |-
       if removeNull:
           headers_aux = headers[:]
           for header in headers_aux:
-              if all(obj.get(header) in ('', None, [], {}) for obj in t):
+              if all(obj.get(header) is None for obj in t):
                   headers.remove(header)
 
       if t and len(headers) > 0:
@@ -639,7 +638,7 @@ script: |-
           keyTransform = lambda s: s
       keys = obj.keys()
       for key in keys:
-          if removeNull and obj[key] in ('', None, [], {}):
+          if removeNull and obj[key] is None:
               continue
           values = key.split('.')
           current = res
@@ -1063,8 +1062,7 @@ script: |-
     'url': 'URL(val.Data && val.Data == obj.Data)',
     'domain': 'Domain(val.Name && val.Name == obj.Name)',
     'cve': 'CVE(val.ID && val.ID == obj.ID)',
-    'email': 'Account.Email(val.Address && val.Address == obj.Address)',
-    'dbotscore': 'DBotScore(val.Indicator == obj.Indicator && val.Vendor == obj.Vendor)'
+    'email': 'Account.Email(val.Address && val.Address == obj.Address)'
   }
 
   ############################### REGEX FORMATTING ###############################
@@ -1123,4 +1121,3 @@ system: true
 scripttarget: 0
 dependson: {}
 timeout: 0s
-releaseNotes: "Added verbose option to LOG.print_log, removeNull checks for more cases"

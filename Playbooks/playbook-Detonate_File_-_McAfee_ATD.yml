@@ -1,7 +1,6 @@
-id: ATD - Detonate File
-version: -1
-name: ATD - Detonate File
-fromversion: 4.0.0
+id: e167067b-b399-4571-8d70-ac4a1ab140d0
+version: 105
+name: McAfee ATD Detonate File
 description: |-
   Detonates a File using the McAfee Advanced Threat Defense sandbox.
   Advanced Threat Defense supports the following File Types:
@@ -21,6 +20,7 @@ description: |-
   jpeg, png, gif
   Other file types
   cmd, ace, bat, arj, vbs, chm, xml, lnk, url, mof, htm, ocx, html, potm, eml, potx, msg, ps1, vb, reg, vba, wsc, vbe, wsf, vbs, wsh
+fromversion: 4.0.0
 starttaskid: "0"
 tasks:
   "0":
@@ -66,8 +66,7 @@ tasks:
       analyzeAgain: {}
       dstIp: {}
       entryID:
-        complex:
-          root: inputs.File.EntryID
+        simple: ${inputs.File.EntryID}
       fileName: {}
       filePriorityQ: {}
       messageId: {}
@@ -95,14 +94,7 @@ tasks:
       id: de5e15a9-6849-40ca-8e5e-6c1a381867e4
       version: -1
       name: GenericPolling
-      description: |-
-        Use as a sub-playbook to block execution of the master playbook until a remote action is complete.
-        This playbook implements polling by continually running the command in Step #2 until the operation completes.
-        The remote action should have the following structure:
-
-        1. Initiate the operation.
-        2. Poll to check if the operation completed.
-        3. (optional) Get the results of the operation.
+      description: Generic Polling Playbook
       playbookName: GenericPolling
       type: playbook
       iscommand: false
@@ -112,18 +104,15 @@ tasks:
       - "9"
     scriptarguments:
       Ids:
-        complex:
-          root: ATD.Task.taskId
+        simple: ${ATD.Task.taskId}
       Interval:
-        complex:
-          root: inputs.Interval
+        simple: ${inputs.interval}
       PollingCommandArgName:
         simple: taskId
       PollingCommandName:
         simple: atd-check-status
       Timeout:
-        complex:
-          root: inputs.Timeout
+        simple: ${inputs.timeout}
       dt:
         simple: ATD.Task(val.status != 'Completed').taskId
     separatecontext: true
@@ -158,23 +147,7 @@ tasks:
     scriptarguments:
       jobId: {}
       taskId:
-        complex:
-          root: ATDTask
-          filters:
-          - - operator: isEqualString
-              left:
-                value:
-                  simple: ATDTask.status
-                iscontext: true
-              right:
-                value:
-                  simple: Completed
-          transformers:
-          - operator: getField
-            args:
-              field:
-                value:
-                  simple: taskId
+        simple: ${ATD.Task(val.status == 'Completed').taskId}
       threshold: {}
       type:
         simple: pdf
@@ -183,7 +156,7 @@ tasks:
       {
         "position": {
           "x": 500,
-          "y": 1770
+          "y": 1595
         }
       }
     note: false
@@ -204,7 +177,7 @@ tasks:
       {
         "position": {
           "x": 70,
-          "y": 1945
+          "y": 1770
         }
       }
     note: false
@@ -269,7 +242,7 @@ tasks:
     task:
       id: 9b1f60b9-0dc4-4f40-8ed6-cefb9bad077d
       version: -1
-      name: Filter taskId
+      name: filter taskId
       description: Checks that valid files only have been sent to detonation.
       type: condition
       iscommand: false
@@ -286,7 +259,7 @@ tasks:
       - - operator: isExists
           left:
             value:
-              simple: ATD.Task.taskId(val != -1)
+              simple: ${ATD.Task.taskId(val !== -1)}
             iscontext: true
     view: |-
       {
@@ -311,12 +284,11 @@ tasks:
       brand: McAfee Advanced Threat Defense
     nexttasks:
       '#none#':
-      - "13"
+      - "3"
     scriptarguments:
       jobId: {}
       taskId:
-        complex:
-          root: ATD.Task.taskId
+        simple: ${ATD.Task.taskId}
     separatecontext: false
     view: |-
       {
@@ -452,41 +424,8 @@ tasks:
     view: |-
       {
         "position": {
-          "x": 162.5,
-          "y": 370
-        }
-      }
-    note: false
-  "13":
-    id: "13"
-    taskid: 7bd95c47-0c05-49e3-80ba-43d2f0e4e2b9
-    type: regular
-    task:
-      id: 7bd95c47-0c05-49e3-80ba-43d2f0e4e2b9
-      version: -1
-      name: Set Context
-      description: "-"
-      scriptName: Set
-      type: regular
-      iscommand: false
-      brand: ""
-    nexttasks:
-      '#none#':
-      - "3"
-    scriptarguments:
-      append: {}
-      key:
-        simple: ATDTask
-      value:
-        complex:
-          root: ATD
-          accessor: Task
-    separatecontext: false
-    view: |-
-      {
-        "position": {
-          "x": 500,
-          "y": 1595
+          "x": 216,
+          "y": 391
         }
       }
     note: false
@@ -495,7 +434,7 @@ view: |-
     "linkLabelsPosition": {},
     "paper": {
       "dimensions": {
-        "height": 1960,
+        "height": 1785,
         "width": 830,
         "x": 50,
         "y": 50
@@ -505,16 +444,15 @@ view: |-
 inputs:
 - key: File
   value:
-    complex:
-      root: File
+    simple: ${File}
   required: false
   description: The file to detonate. File is taken from the context.
-- key: Interval
+- key: interval
   value:
     simple: "1"
   required: false
   description: Polling frequency - how often the polling command should run (minutes)
-- key: Timeout
+- key: timeout
   value:
     simple: "15"
   required: false
@@ -552,4 +490,3 @@ outputs:
 - contextPath: InfoFile.Type
   description: The type of the report file
   type: string
-releaseNotes: "-"
