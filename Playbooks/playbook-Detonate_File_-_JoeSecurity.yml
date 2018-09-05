@@ -1,6 +1,6 @@
-id: detonatefile_-_joesecurity
+id: JoeSecurity - Detonate File
 version: -1
-name: Detonate File - JoeSecurity
+name: JoeSecurity - Detonate File
 fromversion: 4.0.0
 description: |-
   Detonates one or more files using the Joe Security - Joe Sandbox integration.
@@ -49,20 +49,15 @@ tasks:
       - "2"
     scriptarguments:
       comments:
-        complex:
-          root: inputs.Comments
+        simple: ${inputs.comments}
       file_id:
-        complex:
-          root: inputs.File
-          accessor: EntryID
+        simple: ${inputs.EntryID}
       internet-access:
-        complex:
-          root: inputs.InternetAccess
+        simple: ${inputs.internet-access}
       sample_url: {}
       should_wait: {}
       systems:
-        complex:
-          root: inputs.Systems
+        simple: ${inputs.systems}
     separatecontext: false
     view: |-
       {
@@ -74,43 +69,33 @@ tasks:
     note: false
   "2":
     id: "2"
-    taskid: caf4db14-e5d0-40f1-8f17-e9c90d20fb3d
+    taskid: 4d982bec-49b1-485f-85f2-8f2117818166
     type: playbook
     task:
-      id: caf4db14-e5d0-40f1-8f17-e9c90d20fb3d
+      id: 4d982bec-49b1-485f-85f2-8f2117818166
       version: -1
       name: GenericPolling
-      description: |-
-        Use as a sub-playbook to block execution of the master playbook until a remote action is complete.
-        This playbook implements polling by continually running the command in Step #2 until the operation completes.
-        The remote action should have the following structure:
-
-        1. Initiate the operation.
-        2. Poll to check if the operation completed.
-        3. (optional) Get the results of the operation.
+      description: Generic Polling Playbook
       playbookName: GenericPolling
       type: playbook
       iscommand: false
       brand: ""
     nexttasks:
       '#none#':
-      - "8"
+      - "3"
     scriptarguments:
       Ids:
-        complex:
-          root: Joe.Analysis.WebID
+        simple: ${Joe.Analysis.ID}
       Interval:
-        complex:
-          root: inputs.Interval
+        simple: ${inputs.interval}
       PollingCommandArgName:
         simple: webid
       PollingCommandName:
         simple: joe-analysis-info
       Timeout:
-        complex:
-          root: inputs.Timeout
+        simple: ${inputs.timeout}
       dt:
-        simple: Joe.Analysis(val.Status != 'finished').WebID
+        simple: Joe.Analysis(val.Status != 'finished').ID
     separatecontext: true
     loop:
       iscommand: false
@@ -142,32 +127,15 @@ tasks:
       - "5"
     scriptarguments:
       type:
-        complex:
-          root: inputs.ReportFileType
+        simple: ${inputs.report-file-type}
       webid:
-        complex:
-          root: JoeAnalysis
-          filters:
-          - - operator: isEqualString
-              left:
-                value:
-                  simple: JoeAnalysis.Status
-                iscontext: true
-              right:
-                value:
-                  simple: finished
-          transformers:
-          - operator: getField
-            args:
-              field:
-                value:
-                  simple: WebID
+        simple: ${Joe.Analysis.WebID}
     separatecontext: false
     view: |-
       {
         "position": {
           "x": 50,
-          "y": 1245
+          "y": 895
         }
       }
     note: false
@@ -188,7 +156,7 @@ tasks:
       {
         "position": {
           "x": 275,
-          "y": 1420
+          "y": 1070
         }
       }
     note: false
@@ -216,9 +184,7 @@ tasks:
       - - operator: isExists
           left:
             value:
-              complex:
-                root: inputs.File
-                accessor: EntryID
+              simple: inputs.EntryID
             iscontext: true
     view: |-
       {
@@ -249,7 +215,7 @@ tasks:
     conditions:
     - label: "yes"
       condition:
-      - - operator: isExists
+      - - operator: isEqualString
           left:
             value:
               complex:
@@ -263,16 +229,16 @@ tasks:
                     right:
                       value:
                         simple: Joe Security
-                - - operator: isEqualString
-                    left:
+                transformers:
+                - operator: getField
+                  args:
+                    field:
                       value:
-                        simple: modules.state
-                      iscontext: true
-                    right:
-                      value:
-                        simple: active
-                accessor: brand
+                        simple: state
             iscontext: true
+          right:
+            value:
+              simple: active
     view: |-
       {
         "position": {
@@ -281,75 +247,12 @@ tasks:
         }
       }
     note: false
-  "8":
-    id: "8"
-    taskid: 4f2c07a5-cb21-4680-82d6-5cdacba2bd67
-    type: regular
-    task:
-      id: 4f2c07a5-cb21-4680-82d6-5cdacba2bd67
-      version: -1
-      name: JoeSecurity Get Info
-      script: Joe Security|||joe-analysis-info
-      description: "-"
-      type: regular
-      iscommand: true
-      brand: Joe Security
-    nexttasks:
-      '#none#':
-      - "9"
-    scriptarguments:
-      webid:
-        complex:
-          root: Joe
-          accessor: Analysis.WebID
-    separatecontext: false
-    view: |-
-      {
-        "position": {
-          "x": 50,
-          "y": 895
-        }
-      }
-    note: false
-  "9":
-    id: "9"
-    taskid: 7c9693b1-3b80-4e1e-842e-a9f0bd5f48c3
-    type: regular
-    task:
-      id: 7c9693b1-3b80-4e1e-842e-a9f0bd5f48c3
-      version: -1
-      name: Set Context
-      description: "-"
-      scriptName: Set
-      type: regular
-      iscommand: false
-      brand: ""
-    nexttasks:
-      '#none#':
-      - "3"
-    scriptarguments:
-      append: {}
-      key:
-        simple: JoeAnalysis
-      value:
-        complex:
-          root: Joe
-          accessor: Analysis
-    separatecontext: false
-    view: |-
-      {
-        "position": {
-          "x": 50,
-          "y": 1070
-        }
-      }
-    note: false
 view: |-
   {
     "linkLabelsPosition": {},
     "paper": {
       "dimensions": {
-        "height": 1435,
+        "height": 1085,
         "width": 605,
         "x": 50,
         "y": 50
@@ -357,24 +260,24 @@ view: |-
     }
   }
 inputs:
-- key: File
+- key: EntryID
   value:
-    complex:
-      root: File
+    simple: ${File.EntryID}
   required: false
-  description: File object of the file to detonate. The File is taken from the context.
-- key: Interval
+  description: Demisto EntryID of the file to detonate. The EntryID is taken from
+    the context.
+- key: interval
   value:
     simple: "1"
   required: false
   description: Duration for executing the pooling (in minutes)
-- key: Timeout
+- key: timeout
   value:
     simple: "15"
   required: false
   description: The duration after which to stop pooling and to resume the playbook
     (in minutes)
-- key: Systems
+- key: systems
   value: {}
   required: false
   description: 'Operating system to run the analysis on (comma-separated). Supported
@@ -382,17 +285,17 @@ inputs:
     w10, android4, w7x64native, w7_3, w10native, android5native_1, w7_4, w7_5, w10x64,
     w7x64_hvm, android6, iphone1, w7_sec, macvm, w7_lang_packs, w7x64native_hvm, lnxubuntu1,
     lnxcentos1, android7_nougat'
-- key: Comments
+- key: comments
   value: {}
   required: false
   description: Comments for the analysis.
-- key: InternetAccess
+- key: internet-access
   value:
     simple: "True"
   required: false
   description: Enable internet access (boolean). True= internet access (default),
     False= no internet access.
-- key: ReportFileType
+- key: report-file-type
   value: {}
   required: false
   description: 'The resource type to download. Default is html. Supported values are:
@@ -402,75 +305,45 @@ inputs:
     cookbook, bins (dropped files), unpackpe (unpacked PE files), unpack, ida, pcap,
     pcapslim, memdumps, yara'
 outputs:
-- contextPath: DBotScore.Vendor
-  description: 'The name of the vendor: JoeSecurity'
+- contextPath: File.Name
+  description: Filename (only in case of report type=json)
   type: string
-- contextPath: Joe.Analysis.WebID
-  description: Web ID
+- contextPath: File.EntryID
+  description: The Entry ID of the sample
   type: string
-- contextPath: Joe.Analysis.Status
-  description: Analysis Status
+- contextPath: File.Size
+  description: File size (only in case of report type=json)
+  type: number
+- contextPath: File.MD5
+  description: MD5 hash of the file (only in case of report type=json)
   type: string
-- contextPath: Joe.Analysis.Comments
-  description: Analysis Comments
+- contextPath: File.SHA1
+  description: SHA1 hash of the file (only in case of report type=json)
   type: string
-- contextPath: Joe.Analysis.Time
-  description: Submitted Time
-  type: date
-- contextPath: Joe.Analysis.Runs
-  description: Sub-Analysis Information
-- contextPath: Joe.Analysis.Result
-  description: Analysis Results
+- contextPath: File.Type
+  description: File type e.g. "PE" (only in case of report type=json)
   type: string
-- contextPath: Joe.Analysis.Errors
-  description: Raised errors during sampling
-- contextPath: Joe.Analysis.Systems
-  description: Analysis OS
-- contextPath: Joe.Analysis.MD5
-  description: MD5 of analysis sample
+- contextPath: File.SHA256
+  description: SHA256 hash of the file (only in case of report type=json)
   type: string
-- contextPath: Joe.Analysis.SHA1
-  description: SHA1 of analysis sample
+- contextPath: File.Malicious.Vendor
+  description: For malicious files, the vendor that made the decision
   type: string
-- contextPath: Joe.Analysis.SHA256
-  description: SHA256 of analysis sample
-  type: string
-- contextPath: Joe.Analysis.SampleName
-  description: Sample Data, could be a file name or URL
+- contextPath: File.Malicious.Description
+  description: For malicious files, the reason for the vendor to make the decision
   type: string
 - contextPath: DBotScore.Indicator
-  description: The name of the sample file or URL
+  description: The indicator we tested (only in case of report type=json)
+  type: string
 - contextPath: DBotScore.Type
-  description: '''url'' for url samples, otherwise ''file'''
+  description: The type of the indicator (only in case of report type=json)
+  type: string
+- contextPath: DBotScore.Vendor
+  description: Vendor used to calculate the score (only in case of report type=json)
+  type: string
+- contextPath: IP.Address
+  description: IP's relevant to the sample
   type: string
 - contextPath: DBotScore.Score
-  description: The actual score
+  description: The actual score (only in case of report type=json)
   type: number
-- contextPath: DBotScore.Malicious.Vendor
-  description: 'The name of the vendor: JoeSecurity'
-  type: string
-- contextPath: DBotScore.Malicious.Detections
-  description: The sub analysis detection statuses
-  type: string
-- contextPath: DBotScore.Malicious.SHA1
-  description: The SHA1 of the file
-  type: string
-- contextPath: InfoFile.Name
-  description: FileName
-  type: string
-- contextPath: InfoFile.EntryID
-  description: The EntryID of the sample
-  type: string
-- contextPath: InfoFile.Size
-  description: File Size
-  type: number
-- contextPath: InfoFile.Type
-  description: File type e.g. "PE"
-  type: string
-- contextPath: InfoFile.Info
-  description: Basic information of the file
-  type: string
-- contextPath: File.Extension
-  description: File Extension
-  type: string
-releaseNotes: "-"
