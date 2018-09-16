@@ -6,6 +6,7 @@ description: Detonate one or more files using the CrowdStrike Falcon Sandbox int
   context data.
 fromversion: 3.5.0
 toversion: 3.6.0
+releaseNotes: "SHAI"
 starttaskid: "0"
 tasks:
   "0":
