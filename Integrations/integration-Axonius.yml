@@ -1,0 +1,238 @@
+commonfields:
+  id: Axonius
+  version: -1
+name: Axonius
+display: Axonius
+category: IT Services
+image: data:image/png;base64,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
+description: Axonius Cybersecurity Asset Management Platform to enrich asset data
+  for investigations
+configuration:
+- display: Server Address
+  name: server_address
+  defaultvalue: ""
+  type: 0
+  required: true
+- display: User Name
+  name: credentials
+  defaultvalue: ""
+  type: 9
+  required: true
+script:
+  script: |-
+    ''' IMPORTS '''
+    import sys
+
+    import requests
+
+    # Define utf8 as default encoding
+    reload(sys)
+    sys.setdefaultencoding('utf8')
+
+    # disable insecure warnings
+    #pylint: disable=E1101
+    requests.packages.urllib3.disable_warnings()
+
+    ''' GLOBAL VARS '''
+    SERVER_ADDRESS = demisto.params()['server_address']
+    AUTH = demisto.params()['credentials']
+    USERNAME = AUTH['identifier']
+    PASSWORD = AUTH['password']
+
+    TIMEOUT = (5, 300)
+
+    ''' HELPER FUNCTIONS '''
+    def return_error(data):
+        """
+        Return error as result and exit
+        """
+        demisto.results({
+            'Type': entryTypes['error'],
+            'ContentsFormat': formats['text'],
+            'Contents' : data
+        })
+        sys.exit(0)
+
+    def _process_empty_reponse(response):
+
+        if response.status_code == 200:
+            return response
+
+        return_error("Empty response and no information in the header")
+
+    def _process_html_response(response):
+        try:
+            response.raise_for_status()
+        except Exception as e:
+            return_error(str(e))
+
+        return response.text
+
+
+    def _process_json_response(r):
+
+        # Try a json parse
+        try:
+            resp_json = r.json()
+        except Exception as e:
+            return return_error("Unable to parse JSON response. Error: {0}".format(str(e)))
+
+        # Please specify the status codes here
+        if 200 <= r.status_code < 399:
+            return resp_json
+
+        return_error("Error from server. Status Code: {0} Data from server: {1}".format(
+            r.status_code, r.text.replace('{', '{{').replace('}', '}}')))
+
+
+    def _process_response(r):
+        # Process each 'Content-Type' of response separately
+
+        # Process a json response
+        if 'json' in r.headers.get('Content-Type', ''):
+            return _process_json_response(r)
+
+        # Process an HTML resonse, Do this no matter what the api talks.
+        # There is a high chance of a PROXY in between phantom and the rest of
+        # world, in case of errors, PROXY's return HTML, this function parses
+        # the error and adds it to the action_result.
+        if 'html' in r.headers.get('Content-Type', ''):
+            return _process_html_response(r)
+
+        # it's not content-type that is to be parsed, handle an empty response
+        if not r.text:
+            return _process_empty_reponse(r)
+
+        # everything else is actually an error at this point
+        return_error("Can't process response from server. Status Code: {0} Data from server: {1}".format(
+            r.status_code, r.text.replace('{', '{{').replace('}', '}}')))
+
+
+
+    def _make_rest_call(endpoint, headers=None, params=None, data=None, method="get"):
+        try:
+            request_func = getattr(requests, method)
+        except AttributeError:
+            return return_error("Invalid method: {0}".format(method))
+
+        # Create a URL to connect to
+        base_path = "/api/V1/" if endpoint not in ['api', 'login'] else "/api/"
+        url = "https://" + SERVER_ADDRESS + base_path + endpoint
+
+        try:
+            r = request_func(url,
+                             auth=(USERNAME, PASSWORD),  # basic authentication
+                             data=data,
+                             headers=headers,
+                             verify=False,
+                             timeout=TIMEOUT,
+                             params=params)
+        except Exception as e:
+            return_error("Error Connecting to server. Details: {0}".format(str(e.message)))
+
+        return _process_response(r)
+
+
+    ''' EXECUTION CODE '''
+    try:
+        if demisto.command() == 'test-module':
+            # We fetch actions in order to tests connectivity and credentails on login.
+            _make_rest_call('actions')
+            demisto.results('ok')
+
+        elif demisto.command() == 'axi-get-alerts':
+            ret = _make_rest_call('alerts', params=demisto.args(), headers=None)
+            demisto.results({'type': entryTypes['note'],
+                             'Contents': ret,
+                             'ContentesFormat': formats['json']})
+
+        elif demisto.command() == 'axi-delete-alert':
+            raise NotImplementedError()
+
+        elif demisto.command() == 'axi-get-devices':
+            ret = _make_rest_call('devices', params=demisto.args())
+            demisto.results({'type': entryTypes['note'],
+                             'Contents': ret,
+                             'ContentesFormat': formats['json']})
+
+        elif demisto.command() == 'axi-get-users':
+            ret = _make_rest_call('users', params=demisto.args())
+            demisto.results({'type': entryTypes['note'],
+                             'Contents': ret,
+                             'ContentesFormat': formats['json']})
+
+        elif demisto.command() == 'axi-get-user':
+            ret = _make_rest_call('users/{0}'.format(demisto.args()["user_id"]))
+            demisto.results({'type': entryTypes['note'],
+                             'Contents': ret,
+                             'ContentesFormat': formats['json']})
+
+        elif demisto.command() == 'axi-get-device':
+            ret = _make_rest_call('devices/{0}'.format(demisto.args()["device_id"]))
+            demisto.results({'type': entryTypes['note'],
+                             'Contents': ret,
+                             'ContentesFormat': formats['json']})
+
+        else:
+            assert False, "Invalid Command {}".format(demisto.command())
+
+    except Exception, e:
+        LOG(e.message)
+        LOG.print_log()
+        raise
+  type: python
+  commands:
+  - name: axi-get-alerts
+    arguments:
+    - name: skip
+      description: How many alerts to skip (0 means none and bring alerts from the
+        start).
+    - name: limit
+      description: How many alerts to return (pagination).
+    - name: fields
+      description: The fields to return back for each alerts.
+    - name: filter
+      description: The filter to get alerts by.
+    - name: sort
+      description: The field to sort the alerts by.
+    outputs:
+    - {}
+    description: Get Alerts
+  - name: axi-get-devices
+    arguments:
+    - name: skip
+      description: How many devices to skip (0 means none and bring devices from the
+        start).
+    - name: limit
+      description: How many devices to return (pagination).
+    - name: fields
+      description: The fields to return back for each device.
+    - name: filter
+      description: The filter to get devices by.
+    - name: sort
+      description: The field to sort the devices by.
+    description: Get Axonius Devices
+  - name: axi-get-users
+    arguments:
+    - name: skip
+      description: How many users to skip (0 means none and bring users from the start).
+    - name: limit
+      description: How many users to return (pagination).
+    - name: fields
+      description: The fields to return back for each device.
+    - name: filter
+      description: The filter to get users by.
+    - name: sort
+      description: The field to sort the users by.
+    description: Get Axonius Users
+  - name: axi-get-user
+    arguments:
+    - name: user_id
+      required: true
+    description: Get Single Axonius User By Id
+  - name: axi-get-device
+    arguments:
+    - name: device_id
+      required: true
+    description: Get Single Axonius Device By Id
+  runonce: false
